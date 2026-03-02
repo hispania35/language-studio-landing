@@ -2,12 +2,6 @@ import Icon from "@/components/ui/icon";
 
 const reviews = [
   {
-    name: "Ольга К.",
-    course: "Английский, B2",
-    text: "За 8 месяцев прошла путь от Elementary до Upper-Intermediate. Методика супер — на каждом уроке 80% времени говоришь!",
-    rating: 5,
-  },
-  {
     name: "Дмитрий В.",
     course: "Немецкий, B1",
     text: "Переехал в Германию и нужен был немецкий для работы. Ребята подготовили меня к Goethe-Zertifikat B1 за полгода.",
