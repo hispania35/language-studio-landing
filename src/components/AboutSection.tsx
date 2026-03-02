@@ -19,7 +19,7 @@ const features = [
   {
     icon: "Award",
     title: "Подготовка к экзаменам",
-    description: "IELTS, DELE, Goethe-Zertifikat — готовим к международным сертификатам",
+    description: "DELE, Goethe-Zertifikat — готовим к международным сертификатам",
   },
 ];
 
