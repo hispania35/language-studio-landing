@@ -29,6 +29,7 @@ const contacts = [
 
 const socials = [
   { icon: "Users", label: "ВКонтакте", href: "https://vk.com/club119672828" },
+  { icon: "MessageCircle", label: "Макс", href: "https://max.ru/u/f9LHodD0cOKZsNO_3_ers42wYlOir_XREeTGJirv8m5T5FVHokYu5Ac6000" },
 ];
 
 const ContactsSection = () => {

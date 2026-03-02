@@ -156,34 +156,23 @@ const BookingSection = () => {
                   </Select>
                 </div>
 
-                <div className="flex gap-3 mt-2">
-                  <Button
-                    type="submit"
-                    disabled={loading}
-                    className="flex-1 gradient-primary text-white border-0 font-heading font-semibold h-14 rounded-xl text-base"
-                  >
-                    {loading ? (
-                      <>
-                        <Icon name="Loader2" size={20} className="animate-spin" />
-                        Отправляем...
-                      </>
-                    ) : (
-                      <>
-                        Записаться бесплатно
-                        <Icon name="ArrowRight" size={20} />
-                      </>
-                    )}
-                  </Button>
-                  <a
-                    href="https://max.ru/u/f9LHodD0cOKZsNO_3_ers42wYlOir_XREeTGJirv8m5T5FVHokYu5Ac6000"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center justify-center w-14 h-14 rounded-xl bg-blue-500 hover:bg-blue-600 transition-colors flex-shrink-0"
-                    title="Написать в Макс"
-                  >
-                    <span className="text-white font-bold text-sm leading-none">MAX</span>
-                  </a>
-                </div>
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  className="w-full gradient-primary text-white border-0 font-heading font-semibold h-14 rounded-xl text-base mt-2"
+                >
+                  {loading ? (
+                    <>
+                      <Icon name="Loader2" size={20} className="animate-spin" />
+                      Отправляем...
+                    </>
+                  ) : (
+                    <>
+                      Записаться бесплатно
+                      <Icon name="ArrowRight" size={20} />
+                    </>
+                  )}
+                </Button>
               </div>
 
               <p className="text-xs text-muted-foreground text-center mt-4">
