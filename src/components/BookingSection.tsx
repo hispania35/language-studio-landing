@@ -176,7 +176,10 @@ const BookingSection = () => {
               </div>
 
               <p className="text-xs text-muted-foreground text-center mt-4">
-                Нажимая кнопку, вы соглашаетесь с политикой обработки данных
+                Нажимая кнопку, вы соглашаетесь с{" "}
+                <a href="/privacy" target="_blank" className="underline hover:text-foreground transition-colors">
+                  политикой обработки данных
+                </a>
               </p>
             </form>
           </div>
