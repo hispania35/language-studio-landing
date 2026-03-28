@@ -6,8 +6,9 @@ const Footer = () => {
           <a href="#hero" className="font-heading font-900 text-xl gradient-text">
             Hispania
           </a>
-          <p className="text-sm text-muted-foreground">
-            © 2026 Hispania. Все права защищены.
+          <p className="text-sm text-muted-foreground text-center">
+            © 2026 Hispania. Все права защищены.<br />
+            ИП, ИНН 352527263810
           </p>
         </div>
       </div>
