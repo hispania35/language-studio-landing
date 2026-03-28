@@ -8,7 +8,7 @@ const Footer = () => {
           </a>
           <p className="text-sm text-muted-foreground text-center">
             © 2026 Hispania. Все права защищены.<br />
-            ИП, ИНН 352527263810
+            ИНН 352527263810
           </p>
         </div>
       </div>
