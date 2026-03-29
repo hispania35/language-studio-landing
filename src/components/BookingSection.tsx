@@ -59,7 +59,7 @@ const BookingSection = () => {
               </div>
               <h2 className="font-heading font-800 text-4xl lg:text-5xl mb-4">
                 Запишитесь на{" "}
-                <span className="gradient-text">бесплатное</span> пробное
+                <span className="gradient-text">бесплатное</span> пробное занятие
               </h2>
               <p className="text-muted-foreground text-lg mb-8">
                 Познакомьтесь с преподавателем, оцените методику и получите персональный план обучения — абсолютно бесплатно
