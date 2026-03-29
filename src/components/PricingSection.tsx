@@ -20,8 +20,8 @@ const plans = [
   {
     name: "Стандарт",
     description: "Оптимальный темп прогресса",
-    price: "5 400",
-    unit: "месяц",
+    price: "2 200",
+    unit: "урок",
     gradient: "gradient-card-purple",
     features: [
       "60 минут занятие",
