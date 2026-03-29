@@ -10,7 +10,6 @@ const plans = [
     unit: "урок",
     gradient: "gradient-card-blue",
     features: [
-      "1 урок в неделю",
       "40 минут занятие",
       "Домашние задания",
       "Чат с преподавателем",
@@ -25,7 +24,6 @@ const plans = [
     unit: "месяц",
     gradient: "gradient-card-purple",
     features: [
-      "2 урока в неделю",
       "60 минут занятие",
       "Домашние задания",
       "Чат с преподавателем",
@@ -41,7 +39,6 @@ const plans = [
     unit: "месяц",
     gradient: "gradient-card-orange",
     features: [
-      "4 урока в неделю",
       "60 минут занятие",
       "Домашние задания",
       "Чат с преподавателем",
