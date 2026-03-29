@@ -1,10 +1,7 @@
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
-import { useTranslation } from "@/i18n/TranslationContext";
 
 const HeroSection = () => {
-  const { t } = useTranslation();
-
   return (
     <section id="hero" className="relative min-h-screen flex items-center overflow-hidden pt-20">
       <div className="absolute inset-0 bg-gradient-to-br from-purple-50 via-white to-orange-50" />
@@ -17,15 +14,16 @@ const HeroSection = () => {
           <div>
             <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-6 animate-fade-up">
               <Icon name="Sparkles" size={16} />
-              {t("hero_badge")}
+              Набор на 2026 год открыт
             </div>
 
             <h1 className="font-heading font-900 text-5xl lg:text-7xl leading-tight mb-6 animate-fade-up">
-              {t("hero_title")}
+              Говори на{" "}<span className="gradient-text">языке</span><br />своей мечты
             </h1>
 
             <p className="text-lg text-muted-foreground max-w-md mb-8 animate-fade-up-delay-1">
-              {t("hero_subtitle")}
+              Английский, немецкий и испанский с нуля до свободного общения.
+              Современные методики и живая практика с первого занятия.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 animate-fade-up-delay-2">
@@ -34,7 +32,7 @@ const HeroSection = () => {
                 className="gradient-primary text-white border-0 font-heading font-semibold text-base px-8 h-14 rounded-xl"
                 onClick={() => document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" })}
               >
-                {t("hero_cta")}
+                Записаться на пробное
                 <Icon name="ArrowRight" size={20} />
               </Button>
               <Button
@@ -43,19 +41,19 @@ const HeroSection = () => {
                 className="font-heading font-semibold text-base px-8 h-14 rounded-xl"
                 onClick={() => document.getElementById("languages")?.scrollIntoView({ behavior: "smooth" })}
               >
-                {t("hero_more")}
+                Узнать больше
               </Button>
             </div>
 
             <div className="flex items-center gap-8 mt-10 animate-fade-up-delay-3">
               <div>
                 <div className="font-heading font-800 text-3xl gradient-text">500+</div>
-                <div className="text-sm text-muted-foreground">{t("hero_stat_students")}</div>
+                <div className="text-sm text-muted-foreground">учеников</div>
               </div>
               <div className="w-px h-10 bg-border" />
               <div>
                 <div className="font-heading font-800 text-3xl gradient-text">15 лет</div>
-                <div className="text-sm text-muted-foreground">{t("hero_stat_experience")}</div>
+                <div className="text-sm text-muted-foreground">опыта</div>
               </div>
             </div>
           </div>

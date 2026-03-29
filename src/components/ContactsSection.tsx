@@ -1,16 +1,13 @@
 import Icon from "@/components/ui/icon";
-import { useTranslation } from "@/i18n/TranslationContext";
+
+const contacts = [
+  { icon: "Phone", label: "Телефон", value: "8 (921) 123-82-21", href: "tel:89211238221" },
+  { icon: "Mail", label: "Email", value: "hispania35@yandex.ru", href: "mailto:hispania35@yandex.ru" },
+  { icon: "MapPin", label: "Адрес", value: "г. Вологда, ул. Козленская, 43б, офис 10", href: "#" },
+  { icon: "Clock", label: "Режим работы", value: "Пн-Сб: 9:00 — 21:00", href: "#" },
+];
 
 const ContactsSection = () => {
-  const { t } = useTranslation();
-
-  const contacts = [
-    { icon: "Phone", label: t("contacts_phone_label"), value: "8 (921) 123-82-21", href: "tel:89211238221" },
-    { icon: "Mail", label: t("contacts_email_label"), value: "hispania35@yandex.ru", href: "mailto:hispania35@yandex.ru" },
-    { icon: "MapPin", label: t("contacts_address_label"), value: t("contacts_address_value"), href: "#" },
-    { icon: "Clock", label: t("contacts_hours_label"), value: t("contacts_hours_value"), href: "#" },
-  ];
-
   const socials = [
     { icon: "Users", label: "ВКонтакте", href: "https://vk.com/club119672828" },
     { icon: "MessageCircle", label: "Макс", href: "https://max.ru/u/f9LHodD0cOKZsNO_3_ers42wYlOir_XREeTGJirv8m5T5FVHokYu5Ac6000" },
@@ -22,13 +19,13 @@ const ContactsSection = () => {
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-4">
             <Icon name="MapPin" size={16} />
-            {t("contacts_badge")}
+            Контакты
           </div>
           <h2 className="font-heading font-800 text-4xl lg:text-5xl mb-4">
-            {t("contacts_title")}
+            Свяжитесь <span className="gradient-text">с нами</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            {t("contacts_subtitle")}
+            Ответим на вопросы и поможем подобрать подходящий курс
           </p>
         </div>
 

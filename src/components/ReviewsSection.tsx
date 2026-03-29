@@ -1,29 +1,26 @@
 import Icon from "@/components/ui/icon";
-import { useTranslation } from "@/i18n/TranslationContext";
+
+const reviews = [
+  { name: "Анна К.", course: "Английский, B1", text: "За полгода занятий я перешла с нуля до уверенного разговорного уровня. Методика действительно работает — начала говорить уже на первом уроке!", rating: 5 },
+  { name: "Михаил С.", course: "Немецкий, A2", text: "Готовился к поступлению в немецкий университет. Преподаватель помог не только с языком, но и с подготовкой к Goethe-Zertifikat. Сдал с первого раза!", rating: 5 },
+  { name: "Екатерина Л.", course: "Испанский, A1", text: "Хотела выучить испанский для путешествий. Мини-группа — это отличный формат, всегда есть живое общение и внимание преподавателя.", rating: 5 },
+  { name: "Дмитрий В.", course: "Английский, B2", text: "Занимаюсь онлайн уже год. Очень удобно — никуда не нужно ехать, а качество занятий ничем не уступает очному формату. Рекомендую!", rating: 5 },
+];
 
 const ReviewsSection = () => {
-  const { t } = useTranslation();
-
-  const reviews = [
-    { name: t("review1_name"), course: t("review1_course"), text: t("review1_text"), rating: 5 },
-    { name: t("review2_name"), course: t("review2_course"), text: t("review2_text"), rating: 5 },
-    { name: t("review3_name"), course: t("review3_course"), text: t("review3_text"), rating: 5 },
-    { name: t("review4_name"), course: t("review4_course"), text: t("review4_text"), rating: 5 },
-  ];
-
   return (
     <section id="reviews" className="py-24">
       <div className="container mx-auto px-4">
         <div className="text-center max-w-2xl mx-auto mb-16">
           <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-100 text-orange-700 text-sm font-medium mb-4">
             <Icon name="Star" size={16} />
-            {t("reviews_badge")}
+            Отзывы
           </div>
           <h2 className="font-heading font-800 text-4xl lg:text-5xl mb-4">
-            {t("reviews_title")}
+            Что говорят <span className="gradient-text">наши ученики</span>
           </h2>
           <p className="text-muted-foreground text-lg">
-            {t("reviews_subtitle")}
+            Более 500 учеников уже достигли своих целей вместе с нами
           </p>
         </div>
 

@@ -1,8 +1,4 @@
-import { useTranslation } from "@/i18n/TranslationContext";
-
 const Footer = () => {
-  const { t } = useTranslation();
-
   return (
     <footer className="py-8 border-t bg-white">
       <div className="container mx-auto px-4">
@@ -11,7 +7,7 @@ const Footer = () => {
             Hispania
           </a>
           <p className="text-sm text-muted-foreground text-center">
-            {t("footer_rights")}<br />
+            © 2026 Hispania. Все права защищены.<br />
             ИНН 352527263810
           </p>
         </div>
