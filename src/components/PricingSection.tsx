@@ -5,12 +5,13 @@ const plans = [
   {
     name: "Старт",
     description: "Для тех, кто только начинает",
-    price: "1 500",
+    price: "1 200",
+    oldPrice: "1 500",
     unit: "урок",
     gradient: "gradient-card-blue",
     features: [
       "1 урок в неделю",
-      "45 минут занятие",
+      "40 минут занятие",
       "Домашние задания",
       "Чат с преподавателем",
     ],
@@ -85,6 +86,9 @@ const PricingSection = () => {
               <p className="text-muted-foreground text-sm mb-6">{plan.description}</p>
 
               <div className="mb-6">
+                {"oldPrice" in plan && (
+                  <div className="text-muted-foreground text-sm line-through mb-1">{plan.oldPrice} ₽</div>
+                )}
                 <span className="font-heading font-800 text-4xl">{plan.price} ₽</span>
                 <span className="text-muted-foreground text-sm ml-1">/ {plan.unit}</span>
               </div>
