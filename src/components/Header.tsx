@@ -1,18 +1,20 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
-
-const navLinks = [
-  { label: "Главная", href: "#hero" },
-  { label: "О студии", href: "#about" },
-  { label: "Языки", href: "#languages" },
-  { label: "Преподаватели", href: "#teachers" },
-  { label: "Отзывы", href: "#reviews" },
-  { label: "Контакты", href: "#contacts" },
-];
+import { useTranslation } from "@/i18n/TranslationContext";
 
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { t } = useTranslation();
+
+  const navLinks = [
+    { key: "nav_home", href: "#hero" },
+    { key: "nav_about", href: "#about" },
+    { key: "nav_languages", href: "#languages" },
+    { key: "nav_teachers", href: "#teachers" },
+    { key: "nav_reviews", href: "#reviews" },
+    { key: "nav_contacts", href: "#contacts" },
+  ] as const;
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 glass">
@@ -28,7 +30,7 @@ const Header = () => {
               href={link.href}
               className="text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
             >
-              {link.label}
+              {t(link.key)}
             </a>
           ))}
         </nav>
@@ -37,7 +39,7 @@ const Header = () => {
           className="hidden md:inline-flex gradient-primary text-white border-0 font-heading font-semibold"
           onClick={() => document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" })}
         >
-          Записаться
+          {t("nav_cta")}
         </Button>
 
         <button
@@ -57,7 +59,7 @@ const Header = () => {
               className="block py-3 text-sm font-medium text-foreground/70 hover:text-foreground transition-colors"
               onClick={() => setMobileOpen(false)}
             >
-              {link.label}
+              {t(link.key)}
             </a>
           ))}
           <Button
@@ -67,7 +69,7 @@ const Header = () => {
               document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
             }}
           >
-            Записаться
+            {t("nav_cta")}
           </Button>
         </div>
       )}

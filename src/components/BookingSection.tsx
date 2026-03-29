@@ -10,21 +10,18 @@ import {
 } from "@/components/ui/select";
 import Icon from "@/components/ui/icon";
 import { useToast } from "@/hooks/use-toast";
+import { useTranslation } from "@/i18n/TranslationContext";
 
 const BookingSection = () => {
   const { toast } = useToast();
-  const [form, setForm] = useState({
-    name: "",
-    phone: "",
-    language: "",
-    type: "",
-  });
+  const { t } = useTranslation();
+  const [form, setForm] = useState({ name: "", phone: "", language: "", type: "" });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.language) {
-      toast({ title: "Заполните все обязательные поля", variant: "destructive" });
+      toast({ title: t("booking_error_required"), variant: "destructive" });
       return;
     }
     setLoading(true);
@@ -35,13 +32,10 @@ const BookingSection = () => {
         body: JSON.stringify(form),
       });
       if (!res.ok) throw new Error();
-      toast({
-        title: "Заявка отправлена! 🎉",
-        description: "Мы свяжемся с вами в течение 30 минут",
-      });
+      toast({ title: t("booking_success_title"), description: t("booking_success_desc") });
       setForm({ name: "", phone: "", language: "", type: "" });
     } catch {
-      toast({ title: "Ошибка отправки", description: "Попробуйте ещё раз или позвоните нам", variant: "destructive" });
+      toast({ title: t("booking_error_title"), description: t("booking_error_desc"), variant: "destructive" });
     } finally {
       setLoading(false);
     }
@@ -55,14 +49,15 @@ const BookingSection = () => {
             <div>
               <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-4">
                 <Icon name="CalendarCheck" size={16} />
-                Запись
+                {t("booking_badge")}
               </div>
               <h2 className="font-heading font-800 text-4xl lg:text-5xl mb-4">
-                Запишитесь на{" "}
-                <span className="gradient-text">бесплатное</span> пробное занятие
+                {t("booking_title_1")}{" "}
+                <span className="gradient-text">{t("booking_title_2")}</span>{" "}
+                {t("booking_title_3")}
               </h2>
               <p className="text-muted-foreground text-lg mb-8">
-                Познакомьтесь с преподавателем, оцените методику и получите персональный план обучения — абсолютно бесплатно
+                {t("booking_subtitle")}
               </p>
 
               <div className="space-y-4">
@@ -71,8 +66,8 @@ const BookingSection = () => {
                     <Icon name="Clock" size={18} className="text-white" />
                   </div>
                   <div>
-                    <div className="font-heading font-bold text-sm">30 минут</div>
-                    <div className="text-xs text-muted-foreground">Продолжительность пробного</div>
+                    <div className="font-heading font-bold text-sm">{t("booking_duration")}</div>
+                    <div className="text-xs text-muted-foreground">{t("booking_duration_label")}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -80,8 +75,8 @@ const BookingSection = () => {
                     <Icon name="Gift" size={18} className="text-white" />
                   </div>
                   <div>
-                    <div className="font-heading font-bold text-sm">Бесплатно</div>
-                    <div className="text-xs text-muted-foreground">Никаких скрытых платежей</div>
+                    <div className="font-heading font-bold text-sm">{t("booking_free")}</div>
+                    <div className="text-xs text-muted-foreground">{t("booking_free_label")}</div>
                   </div>
                 </div>
                 <div className="flex items-center gap-4">
@@ -89,8 +84,8 @@ const BookingSection = () => {
                     <Icon name="FileText" size={18} className="text-white" />
                   </div>
                   <div>
-                    <div className="font-heading font-bold text-sm">Персональный план</div>
-                    <div className="text-xs text-muted-foreground">Получите план обучения после урока</div>
+                    <div className="font-heading font-bold text-sm">{t("booking_plan")}</div>
+                    <div className="text-xs text-muted-foreground">{t("booking_plan_label")}</div>
                   </div>
                 </div>
               </div>
@@ -100,13 +95,13 @@ const BookingSection = () => {
               onSubmit={handleSubmit}
               className="rounded-3xl bg-white border border-border/50 shadow-lg p-8"
             >
-              <h3 className="font-heading font-bold text-xl mb-6">Оставьте заявку</h3>
+              <h3 className="font-heading font-bold text-xl mb-6">{t("booking_form_title")}</h3>
 
               <div className="space-y-4">
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Ваше имя *</label>
+                  <label className="text-sm font-medium mb-2 block">{t("booking_name_label")}</label>
                   <Input
-                    placeholder="Как вас зовут?"
+                    placeholder={t("booking_name_placeholder")}
                     value={form.name}
                     onChange={(e) => setForm({ ...form, name: e.target.value })}
                     className="h-12 rounded-xl"
@@ -114,9 +109,9 @@ const BookingSection = () => {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Телефон *</label>
+                  <label className="text-sm font-medium mb-2 block">{t("booking_phone_label")}</label>
                   <Input
-                    placeholder="+7 (___) ___-__-__"
+                    placeholder={t("booking_phone_placeholder")}
                     value={form.phone}
                     onChange={(e) => setForm({ ...form, phone: e.target.value })}
                     className="h-12 rounded-xl"
@@ -124,34 +119,28 @@ const BookingSection = () => {
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Язык *</label>
-                  <Select
-                    value={form.language}
-                    onValueChange={(value) => setForm({ ...form, language: value })}
-                  >
+                  <label className="text-sm font-medium mb-2 block">{t("booking_lang_label")}</label>
+                  <Select value={form.language} onValueChange={(value) => setForm({ ...form, language: value })}>
                     <SelectTrigger className="h-12 rounded-xl">
-                      <SelectValue placeholder="Выберите язык" />
+                      <SelectValue placeholder={t("booking_lang_placeholder")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="english">🇬🇧 Английский</SelectItem>
-                      <SelectItem value="german">🇩🇪 Немецкий</SelectItem>
-                      <SelectItem value="spanish">🇪🇸 Испанский</SelectItem>
+                      <SelectItem value="english">{t("booking_lang_en")}</SelectItem>
+                      <SelectItem value="german">{t("booking_lang_de")}</SelectItem>
+                      <SelectItem value="spanish">{t("booking_lang_es")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
 
                 <div>
-                  <label className="text-sm font-medium mb-2 block">Формат</label>
-                  <Select
-                    value={form.type}
-                    onValueChange={(value) => setForm({ ...form, type: value })}
-                  >
+                  <label className="text-sm font-medium mb-2 block">{t("booking_format_label")}</label>
+                  <Select value={form.type} onValueChange={(value) => setForm({ ...form, type: value })}>
                     <SelectTrigger className="h-12 rounded-xl">
-                      <SelectValue placeholder="Онлайн или оффлайн?" />
+                      <SelectValue placeholder={t("booking_format_placeholder")} />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="online">💻 Онлайн</SelectItem>
-                      <SelectItem value="offline">🏫 В студии</SelectItem>
+                      <SelectItem value="online">{t("booking_format_online")}</SelectItem>
+                      <SelectItem value="offline">{t("booking_format_offline")}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -164,11 +153,11 @@ const BookingSection = () => {
                   {loading ? (
                     <>
                       <Icon name="Loader2" size={20} className="animate-spin" />
-                      Отправляем...
+                      {t("booking_submitting")}
                     </>
                   ) : (
                     <>
-                      Записаться бесплатно
+                      {t("booking_submit")}
                       <Icon name="ArrowRight" size={20} />
                     </>
                   )}
@@ -176,9 +165,9 @@ const BookingSection = () => {
               </div>
 
               <p className="text-xs text-muted-foreground text-center mt-4">
-                Нажимая кнопку, вы соглашаетесь с{" "}
+                {t("booking_privacy").split("политикой")[0]}
                 <a href="/privacy" target="_blank" className="underline hover:text-foreground transition-colors">
-                  политикой обработки данных
+                  {t("booking_privacy").includes("политикой") ? "политикой обработки данных" : t("booking_privacy")}
                 </a>
               </p>
             </form>
