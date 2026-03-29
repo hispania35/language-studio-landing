@@ -35,8 +35,8 @@ const plans = [
   {
     name: "Групповой",
     description: "От 3 человек — учиться веселее вместе",
-    price: "9 600",
-    unit: "месяц",
+    price: "800",
+    unit: "урок",
     gradient: "gradient-card-orange",
     features: [
       "От 3 человек в группе",
