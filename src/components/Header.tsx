@@ -50,7 +50,7 @@ const Header = () => {
               onClick={() => setAskOpen(true)}
             >
               <Icon name="MessageCircle" size={16} />
-              Задать вопрос
+              Получить скидку
             </Button>
             <Button
               className="gradient-primary text-white border-0 font-heading font-semibold"
@@ -89,7 +89,7 @@ const Header = () => {
               }}
             >
               <Icon name="MessageCircle" size={16} />
-              Задать вопрос
+              Получить скидку
             </Button>
             <Button
               className="w-full mt-2 gradient-primary text-white border-0 font-heading font-semibold"
