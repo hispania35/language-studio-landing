@@ -101,6 +101,12 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
                 Отправить
                 <Icon name="Send" size={18} />
               </Button>
+              <p className="text-xs text-muted-foreground text-center">
+                Нажимая кнопку, вы соглашаетесь с{" "}
+                <a href="/privacy" target="_blank" className="underline hover:text-foreground transition-colors">
+                  политикой обработки данных
+                </a>
+              </p>
             </form>
           </>
         )}
