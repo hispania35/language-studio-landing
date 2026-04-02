@@ -56,7 +56,7 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
         ) : (
           <>
             <div className="mb-6">
-              <h3 className="font-heading font-800 text-2xl mb-1">Задать вопрос</h3>
+              <h3 className="font-heading font-800 text-2xl mb-1">Получить скидку</h3>
               <p className="text-muted-foreground text-sm">Ответим в течение нескольких часов</p>
             </div>
 
