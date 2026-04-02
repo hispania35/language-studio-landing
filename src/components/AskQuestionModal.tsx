@@ -13,8 +13,13 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
 
   if (!open) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    await fetch("https://functions.poehali.dev/a9b287a8-a09a-4581-9cbd-877c2f9f2cf2", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
     setSent(true);
     setForm({ name: "", contact: "", question: "" });
     setTimeout(() => {
