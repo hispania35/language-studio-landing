@@ -27,7 +27,7 @@ const Header = () => {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 glass">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <a href="#hero" className="font-heading font-900 text-2xl gradient-text">
+          <a href="#about" className="font-heading font-900 text-2xl gradient-text">
             Hispania
           </a>
 
