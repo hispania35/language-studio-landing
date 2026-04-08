@@ -68,7 +68,7 @@ const HeroSection = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-purple-900/30 to-transparent" />
             </div>
 
-            <div className="absolute -bottom-6 -left-6 glass rounded-2xl p-4 shadow-lg animate-float">
+            <a href="#languages" className="absolute -bottom-6 -left-6 glass rounded-2xl p-4 shadow-lg animate-float hover:scale-105 transition-transform cursor-pointer">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl gradient-primary flex items-center justify-center text-white text-2xl">
                   🇬🇧
@@ -78,7 +78,7 @@ const HeroSection = () => {
                   <div className="text-xs text-muted-foreground">A1 → B2</div>
                 </div>
               </div>
-            </div>
+            </a>
 
             <a href="#languages" className="absolute -top-4 -right-4 glass rounded-2xl p-4 shadow-lg animate-float-delay hover:scale-105 transition-transform cursor-pointer">
               <div className="flex items-center gap-3">
