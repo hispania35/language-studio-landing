@@ -12,10 +12,10 @@ const HeroSection = () => {
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid lg:grid-cols-2 gap-12 items-center">
           <div>
-            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-6 animate-fade-up">
+            <a href="#booking" className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-6 animate-fade-up hover:bg-purple-200 transition-colors cursor-pointer">
               <Icon name="Sparkles" size={16} />
               Набор на 2026 год открыт
-            </div>
+            </a>
 
             <h1 className="font-heading font-900 text-5xl lg:text-7xl leading-tight mb-6 animate-fade-up">
               Говори на{" "}<span className="gradient-text">языке</span><br />своей мечты
