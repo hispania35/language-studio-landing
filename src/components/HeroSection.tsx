@@ -80,7 +80,7 @@ const HeroSection = () => {
               </div>
             </div>
 
-            <div className="absolute -top-4 -right-4 glass rounded-2xl p-4 shadow-lg animate-float-delay">
+            <a href="#languages" className="absolute -top-4 -right-4 glass rounded-2xl p-4 shadow-lg animate-float-delay hover:scale-105 transition-transform cursor-pointer">
               <div className="flex items-center gap-3">
                 <div className="w-12 h-12 rounded-xl bg-orange-500 flex items-center justify-center text-white text-2xl">
                   🇪🇸
@@ -90,7 +90,7 @@ const HeroSection = () => {
                   <div className="text-xs text-muted-foreground">A1 → B2</div>
                 </div>
               </div>
-            </div>
+            </a>
           </div>
         </div>
       </div>
