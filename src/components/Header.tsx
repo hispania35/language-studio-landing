@@ -54,7 +54,7 @@ const Header = () => {
             </Button>
             <Button
               className="gradient-primary text-white border-0 font-heading font-semibold"
-              onClick={() => document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" })}
+              onClick={() => { const el = document.getElementById("booking"); if (el) el.scrollIntoView({ behavior: "smooth" }); }}
             >
               Записаться
             </Button>
@@ -95,7 +95,7 @@ const Header = () => {
               className="w-full mt-2 gradient-primary text-white border-0 font-heading font-semibold"
               onClick={() => {
                 setMobileOpen(false);
-                document.getElementById("booking")?.scrollIntoView({ behavior: "smooth" });
+                const el = document.getElementById("booking"); if (el) el.scrollIntoView({ behavior: "smooth" });
               }}
             >
               Записаться

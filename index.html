@@ -2,7 +2,8 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
     <title>Hispania — Языковая студия</title>
     <meta name="description" content="Hispania — языковая студия. Немецкий, испанский, английский. Запишись на пробное занятие!"/>
     <meta name="author" content="Hispania"/>
@@ -25,6 +26,26 @@
 
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS COMMENT! -->
     <script src="https://cdn.poehali.dev/intertnal/js/pp-min-2.js"></script>
+    <script>
+      if (!('scrollBehavior' in document.documentElement.style)) {
+        var _origSIV = Element.prototype.scrollIntoView;
+        Element.prototype.scrollIntoView = function(opts) {
+          if (opts && opts.behavior === 'smooth') {
+            var target = this, start = window.pageYOffset;
+            var end = target.getBoundingClientRect().top + start;
+            var dist = end - start, dur = 600, t0 = null;
+            function step(ts) {
+              if (!t0) t0 = ts;
+              var p = Math.min((ts - t0) / dur, 1);
+              var e = p < 0.5 ? 2*p*p : -1+(4-2*p)*p;
+              window.scrollTo(0, start + dist * e);
+              if (p < 1) requestAnimationFrame(step);
+            }
+            requestAnimationFrame(step);
+          } else { _origSIV.call(this, opts); }
+        };
+      }
+    </script>
     <script src="https://cdn.poehali.dev/intertnal/js/route-min.js"></script>
     <script src="https://cdn.poehali.dev/intertnal/js/telemetry-min.js"></script>
     <!-- IMPORTANT: DO NOT REMOVE THIS SCRIPT TAG OR THIS COMMENT! -->
