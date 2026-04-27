@@ -62,7 +62,8 @@ const HeroSection = () => {
             <div className="relative rounded-3xl overflow-hidden shadow-2xl">
               <img
                 src="https://cdn.poehali.dev/projects/c066c37a-f840-40ae-bf25-35290452380d/files/803028f6-6301-487d-bdfa-c9513189e123.jpg"
-                alt="Студенты языковой студии Hispania"
+                alt="Студенты языковой студии Hispania изучают испанский, немецкий и английский язык в Вологде"
+                loading="eager"
                 className="w-full h-[500px] object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-purple-900/30 to-transparent" />

@@ -19,7 +19,8 @@ const TeachersSection = () => {
             <div className="overflow-hidden h-80">
               <img
                 src="https://cdn.poehali.dev/projects/c066c37a-f840-40ae-bf25-35290452380d/bucket/35f364a9-ef21-4a45-9003-9875215dd2ca.jpg"
-                alt="Преподаватель"
+                alt="Преподаватель испанского языка Седова Ольга — языковая студия Hispania"
+                loading="lazy"
                 className="w-full h-full object-cover object-top group-hover:scale-105 transition-transform duration-500"
               />
             </div>
