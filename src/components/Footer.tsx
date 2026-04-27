@@ -38,9 +38,7 @@ const Footer = () => {
             {copied ? "Ссылка скопирована!" : "Поделиться"}
           </button>
         </div>
-        <div aria-hidden="true" className="text-white text-[0px] select-none overflow-hidden h-0">
-          #немецкийввологде #немецкийонлайн #языковыекурсыонлайн #english #learnenglish #английский #английскийязык #учиманглийский #englishteacher #englishonline #учиманглискийввологде #espanol #aprenderespanol #испанский #испанскийввологде #испанскийязык #испанскийснуля #espanolfacil #онлайнкурсы #онлайнобучение #дистанционноеобучение #онлайнязыковыекурсы #onlinecourses #onlinelanguagelearning #virtualclasses #языковыекурсы #курсыиностранныхязыков #изучениеязыков #обучениеязыкам #языковаяшкола #школаязыков #лингвистическиекурсы #languagecourses #languagestudy #languageschool
-        </div>
+
       </div>
     </footer>
   );
