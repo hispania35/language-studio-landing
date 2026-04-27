@@ -3,7 +3,7 @@ import Icon from "@/components/ui/icon";
 const contacts = [
   { icon: "Phone", label: "Телефон", value: "8 (921) 123-82-21", href: "tel:89211238221" },
   { icon: "Mail", label: "Email", value: "hispania35@yandex.ru", href: "mailto:hispania35@yandex.ru" },
-  { icon: "MapPin", label: "Адрес", value: "г. Вологда, ул. Козленская, 43б, офис 10", href: "#" },
+  { icon: "MapPin", label: "Адрес", value: "г. Вологда, ул. Козленская, 43б, офис 10", href: "https://yandex.ru/maps/?text=Вологда%2C+ул.+Козленская%2C+43б" },
   { icon: "Clock", label: "Режим работы", value: "Пн-Сб: 9:00 — 21:00", href: "#" },
 ];
 
@@ -34,6 +34,8 @@ const ContactsSection = () => {
             <a
               key={index}
               href={contact.href}
+              target={contact.href.startsWith("http") ? "_blank" : undefined}
+              rel={contact.href.startsWith("http") ? "noopener noreferrer" : undefined}
               className="hover-lift group rounded-2xl p-6 bg-white border border-border/50 shadow-sm text-center"
             >
               <div className="w-14 h-14 rounded-2xl gradient-primary flex items-center justify-center mx-auto mb-4 group-hover:scale-110 transition-transform">
