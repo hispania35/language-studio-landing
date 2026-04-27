@@ -9,6 +9,7 @@ const navLinks = [
   { label: "Языки", href: "#languages" },
   { label: "Преподаватели", href: "#teachers" },
   { label: "Отзывы", href: "#reviews" },
+  { label: "FAQ", href: "#faq" },
   { label: "Контакты", href: "#contacts" },
 ];
 
