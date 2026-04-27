@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Icon from "@/components/ui/icon";
 
 const reviews = [
@@ -8,6 +9,20 @@ const reviews = [
 ];
 
 const ReviewsSection = () => {
+  const [copied, setCopied] = useState(false);
+
+  const handleShare = async () => {
+    if (navigator.share) {
+      try {
+        await navigator.share({ title: "Hispania", text: "Языковая студия Hispania — испанский, немецкий, английский в Вологде и онлайн!", url: "https://hispania35.ru" });
+      } catch (_e) { void _e; }
+    } else {
+      await navigator.clipboard.writeText("https://hispania35.ru");
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  };
+
   return (
     <section id="reviews" className="py-24">
       <div className="container mx-auto px-4">
@@ -22,6 +37,16 @@ const ReviewsSection = () => {
           <p className="text-muted-foreground text-lg">
             Более 500 учеников уже достигли своих целей вместе с нами
           </p>
+        </div>
+
+        <div className="flex justify-center mb-10">
+          <button
+            onClick={handleShare}
+            className="inline-flex items-center gap-2 px-6 py-3 rounded-xl border border-border/50 text-sm text-muted-foreground hover:text-foreground hover:border-border transition-colors bg-white shadow-sm"
+          >
+            <Icon name={copied ? "Check" : "Share2"} size={16} />
+            {copied ? "Ссылка скопирована!" : "Поделиться с другом"}
+          </button>
         </div>
 
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
