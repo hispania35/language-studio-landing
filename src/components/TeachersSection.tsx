@@ -25,7 +25,7 @@ const TeachersSection = () => {
               />
             </div>
             <div className="p-6">
-              <p className="text-muted-foreground text-sm">Носитель языка и сертифицированный преподаватель с международным опытом</p>
+              <p className="text-muted-foreground text-sm">Сертифицированный преподаватель с международным опытом</p>
             </div>
           </div>
         </div>
