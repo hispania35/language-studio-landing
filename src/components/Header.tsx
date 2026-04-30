@@ -1,7 +1,8 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
-import AskQuestionModal from "@/components/AskQuestionModal";
+
+const AskQuestionModal = lazy(() => import("@/components/AskQuestionModal"));
 
 const navLinks = [
   { label: "Главная", href: "#hero" },
@@ -105,7 +106,9 @@ const Header = () => {
         )}
       </header>
 
-      <AskQuestionModal open={askOpen} onClose={() => setAskOpen(false)} />
+      <Suspense fallback={null}>
+        <AskQuestionModal open={askOpen} onClose={() => setAskOpen(false)} />
+      </Suspense>
     </>
   );
 };
