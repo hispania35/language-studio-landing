@@ -9,8 +9,17 @@ const NotFoundPage = () => {
         <h1 className="text-2xl font-heading font-bold text-foreground mb-3">
           Страница не найдена
         </h1>
-        <p className="text-muted-foreground mb-8 max-w-sm mx-auto">
+        <p className="text-muted-foreground mb-3 max-w-sm mx-auto">
           Возможно, ссылка устарела или страница была удалена
+        </p>
+        <p className="text-muted-foreground mb-8 max-w-sm mx-auto">
+          Сайт доступен на резервном домене:{" "}
+          <a
+            href="https://hispania35.ru/"
+            className="gradient-text font-semibold hover:opacity-80 transition-opacity"
+          >
+            hispania35.ru
+          </a>
         </p>
         <Button
           className="gradient-primary text-white border-0 font-heading font-semibold"
