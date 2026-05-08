@@ -7,7 +7,7 @@ import { lazy, Suspense } from "react";
 
 const Index = lazy(() => import("./pages/Index"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
-const NotFound = lazy(() => import("./pages/NotFound"));
+const NotFound = lazy(() => import("./pages/NotFoundPage"));
 
 const queryClient = new QueryClient();
 
