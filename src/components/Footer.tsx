@@ -26,10 +26,15 @@ const Footer = () => {
           <a href="#hero" className="font-heading font-900 text-xl gradient-text">
             Hispania
           </a>
-          <p className="text-sm text-muted-foreground text-center">
-            © 2026 Hispania. Все права защищены.<br />
-            ИНН 352527263810
-          </p>
+          <div className="flex flex-col items-center gap-1 text-center">
+            <p className="text-sm text-muted-foreground">
+              © 2026 Hispania. Все права защищены.<br />
+              ИНН 352527263810
+            </p>
+            <a href="/oferta" className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2">
+              Договор-оферта
+            </a>
+          </div>
           <button
             onClick={handleShare}
             className="inline-flex items-center gap-2 px-4 py-2 rounded-xl border border-border/50 text-sm text-muted-foreground hover:text-foreground hover:border-border transition-colors"

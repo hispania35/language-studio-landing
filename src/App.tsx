@@ -7,6 +7,7 @@ import { lazy, Suspense } from "react";
 
 const Index = lazy(() => import("./pages/Index"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const Oferta = lazy(() => import("./pages/Oferta"));
 const NotFound = lazy(() => import("./pages/NotFoundPage"));
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
           <Routes>
             <Route path="/" element={<Index />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
+            <Route path="/oferta" element={<Oferta />} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
