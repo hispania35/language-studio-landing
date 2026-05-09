@@ -43,7 +43,16 @@ const Footer = () => {
             {copied ? "Ссылка скопирована!" : "Поделиться"}
           </button>
         </div>
-
+        <div className="mt-4 text-center">
+          <a
+            href="https://landingguru.ru/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-muted-foreground/60 hover:text-muted-foreground transition-colors"
+          >
+            Сайт разработан landingguru.ru
+          </a>
+        </div>
       </div>
     </footer>
   );
