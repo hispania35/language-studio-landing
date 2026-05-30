@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<yml_catalog date="2026-05-18T14:18:00+03:00">
+  <shop>
+    <name>Hispania35</name>
+    <url>https://hispania35.online/</url>
+    <platform>WordPress</platform>
+    <categories>
+      <category id="1">Образование</category>
+      <category id="2" parentId="1">Языковые курсы</category>
+      <category id="3" parentId="2">Испанский язык</category>
+    </categories>
+    <offers>
+      <offer id="spanish_online_1" available="true">
+        <url>https://hispania35.online/</url>
+        <price>2200</price>
+        <currencyId>RUR</currencyId>
+        <categoryId>3</categoryId>
+        <name>Онлайн уроки испанского</name>
+        <description>Индивидуальные онлайн занятия испанским языком с носителем. Длительность — 60 минут.</description>
+        <picture>https://hispania35.online/images/spanish-course.jpg</picture>
+      </offer>
+    </offers>
+  </shop>
+</yml_catalog>
