@@ -4,6 +4,9 @@
     <name>Hispania35</name>
     <url>https://hispania35.online/</url>
     <platform>WordPress</platform>
+    <currencies>
+      <currency id="RUR" rate="1"/>
+    </currencies>
     <categories>
       <category id="1">Образование</category>
       <category id="2" parentId="1">Языковые курсы</category>
@@ -11,13 +14,21 @@
     </categories>
     <offers>
       <offer id="spanish_online_1" available="true">
-        <url>https://hispania35.online/</url>
+        <url>https://hispania35.online/spanish-online-course</url>
         <price>2200</price>
         <currencyId>RUR</currencyId>
         <categoryId>3</categoryId>
+        <vendorCode>SPANISH_ONLINE_BASIC_2026</vendorCode>
         <name>Онлайн уроки испанского</name>
         <description>Индивидуальные онлайн занятия испанским языком. Длительность — 60 минут.</description>
         <picture>https://hispania35.online/images/spanish-course.jpg</picture>
+        <delivery>false</delivery>
+        <params>
+          <param name="Тип курса">Базовый</param>
+          <param name="Формат обучения">Онлайн, индивидуально</param>
+          <param name="Длительность занятия">60 минут</param>
+          <param name="Язык обучения">Испанский</param>
+        </params>
       </offer>
     </offers>
   </shop>
