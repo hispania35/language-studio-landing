@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <yml_catalog date="2026-05-30T12:00:00+03:00">
   <shop>
-    <name>Hispania — курсы немецкого языка</name>
+    <name>Hispania — немецкий язык</name>
     <company>ООО «Hispania»</company>
     <url>https://hispania35.online/</url>
     <currencies>
@@ -18,16 +18,16 @@
         <currencyId>RUB</currencyId>
         <name>Подготовка к сдаче экзамена Goethe‑Zertifikat (онлайн, 60 минут)</name>
         <categoryId>1</categoryId>
-        <picture>https://hispania35.online/images/goethe-lesson.jpg</picture>
-        <description>
-          Онлайн‑занятие по подготовке к международному экзамену Goethe‑Zertifikat.
-          Длительность: 60 минут. Разберём структуру экзамена, отработаем типовые задания и стратегии выполнения.
-          Занятия с опытными преподавателями, гибкий график. Стоимость одного урока — 2 200 руб.
-        </description>
+        <param name="Полная версия">https://hispania35.online/images/goethe-lesson-full.jpg</param>
+        <description>Онлайн‑занятие по подготовке к международному экзамену Goethe‑Zertifikat. Длительность: 60 минут. Разберём структуру экзамена, отработаем типовые задания и стратегии выполнения. Занятия с опытными преподавателями, гибкий график. Стоимость одного урока — 2 200 руб.</description>
         <param name="Длительность">60 минут</param>
         <param name="Формат">Онлайн</param>
         <param name="Тип">Индивидуальное занятие</param>
         <param name="Цель">Подготовка к Goethe‑Zertifikat</param>
+        <param name="Уровень владения языком">B2</param>
+        <param name="Целевая аудитория">Взрослые</param>
+        <delivery>false</delivery>
+        <pickup>false</pickup>
       </offer>
     </offers>
   </shop>
