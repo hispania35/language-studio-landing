@@ -18,7 +18,7 @@
         <currencyId>RUB</currencyId>
         <name>Подготовка к сдаче экзамена Goethe‑Zertifikat (онлайн, 60 минут)</name>
         <categoryId>1</categoryId>
-        <param name="Полная версия">https://hispania35.online/images/goethe-lesson-full.jpg</param>
+        <picture>https://cdn.poehali.dev/projects/c066c37a-f840-40ae-bf25-35290452380d/bucket/5a757972-11fc-4995-979f-da3956a5cd84.jpg</picture>
         <description>Онлайн‑занятие по подготовке к международному экзамену Goethe‑Zertifikat. Длительность: 60 минут. Разберём структуру экзамена, отработаем типовые задания и стратегии выполнения. Занятия с опытными преподавателями, гибкий график. Стоимость одного урока — 2 200 руб.</description>
         <param name="Длительность">60 минут</param>
         <param name="Формат">Онлайн</param>
