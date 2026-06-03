@@ -1,16 +1,18 @@
+import { lazy, Suspense } from "react";
 import Header from "@/components/Header";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
 import LanguagesSection from "@/components/LanguagesSection";
-import PricingSection from "@/components/PricingSection";
-import TeachersSection from "@/components/TeachersSection";
-import ReviewsSection from "@/components/ReviewsSection";
-import SeoSection from "@/components/SeoSection";
-import FaqSection from "@/components/FaqSection";
-import BookingSection from "@/components/BookingSection";
-import ContactsSection from "@/components/ContactsSection";
-import Footer from "@/components/Footer";
-import CookieBanner from "@/components/CookieBanner";
+
+const PricingSection = lazy(() => import("@/components/PricingSection"));
+const TeachersSection = lazy(() => import("@/components/TeachersSection"));
+const ReviewsSection = lazy(() => import("@/components/ReviewsSection"));
+const SeoSection = lazy(() => import("@/components/SeoSection"));
+const FaqSection = lazy(() => import("@/components/FaqSection"));
+const BookingSection = lazy(() => import("@/components/BookingSection"));
+const ContactsSection = lazy(() => import("@/components/ContactsSection"));
+const Footer = lazy(() => import("@/components/Footer"));
+const CookieBanner = lazy(() => import("@/components/CookieBanner"));
 
 const Index = () => {
   return (
@@ -19,15 +21,17 @@ const Index = () => {
       <HeroSection />
       <AboutSection />
       <LanguagesSection />
-      <PricingSection />
-      <TeachersSection />
-      <ReviewsSection />
-      <SeoSection />
-      <FaqSection />
-      <BookingSection />
-      <ContactsSection />
-      <Footer />
-      <CookieBanner />
+      <Suspense fallback={null}>
+        <PricingSection />
+        <TeachersSection />
+        <ReviewsSection />
+        <SeoSection />
+        <FaqSection />
+        <BookingSection />
+        <ContactsSection />
+        <Footer />
+        <CookieBanner />
+      </Suspense>
     </div>
   );
 };
