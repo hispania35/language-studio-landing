@@ -8,7 +8,10 @@ import { lazy, Suspense } from "react";
 const Index = lazy(() => import("./pages/Index"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Oferta = lazy(() => import("./pages/Oferta"));
+const CityPage = lazy(() => import("./pages/CityPage"));
 const NotFound = lazy(() => import("./pages/NotFoundPage"));
+
+const citySlugs = ["moskva", "sankt-peterburg", "kazan", "ekaterinburg", "novosibirsk"];
 
 const queryClient = new QueryClient();
 
@@ -23,6 +26,9 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/oferta" element={<Oferta />} />
+            {citySlugs.map((slug) => (
+              <Route key={slug} path={`/${slug}`} element={<CityPage />} />
+            ))}
             <Route path="*" element={<NotFound />} />
           </Routes>
         </Suspense>
