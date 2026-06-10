@@ -15,6 +15,7 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
   const [sent, setSent] = useState(false);
   const [alreadyIssued, setAlreadyIssued] = useState(false);
   const [issuedPromo, setIssuedPromo] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
   const [error, setError] = useState("");
 
   if (!open) return null;
@@ -22,6 +23,10 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError("");
+    if (!subscribed) {
+      setError("Сначала нажмите «Подписаться на группу ВК»");
+      return;
+    }
     setLoading(true);
     try {
       const res = await fetch("https://functions.poehali.dev/a9b287a8-a09a-4581-9cbd-877c2f9f2cf2", {
@@ -53,6 +58,7 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
     setSent(false);
     setAlreadyIssued(false);
     setIssuedPromo("");
+    setSubscribed(false);
     setError("");
     onClose();
   };
@@ -110,10 +116,18 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
               href={VK_GROUP_URL}
               target="_blank"
               rel="noopener noreferrer"
-              className="flex items-center justify-center gap-2 w-full h-12 rounded-xl bg-[#0077FF] text-white font-heading font-semibold mb-5 hover:opacity-90 transition-opacity"
+              onClick={() => {
+                setSubscribed(true);
+                setError("");
+              }}
+              className={`flex items-center justify-center gap-2 w-full h-12 rounded-xl font-heading font-semibold mb-5 transition-opacity ${
+                subscribed
+                  ? "bg-green-600 text-white hover:opacity-90"
+                  : "bg-[#0077FF] text-white hover:opacity-90"
+              }`}
             >
-              <Icon name="Users" size={18} />
-              Подписаться на группу ВК
+              <Icon name={subscribed ? "Check" : "Users"} size={18} />
+              {subscribed ? "Подписка оформлена" : "Подписаться на группу ВК"}
             </a>
 
             <form onSubmit={handleSubmit} className="space-y-4">
