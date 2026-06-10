@@ -1,24 +1,20 @@
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
-import { useEffect, useState } from "react";
+import { getCityBySlug } from "@/data/cities";
+
+const popularCitySlugs = [
+  "moskva",
+  "sankt-peterburg",
+  "novosibirsk",
+  "ekaterinburg",
+  "kazan",
+  "nizhniy-novgorod",
+];
 
 const NotFoundPage = () => {
-  const [seconds, setSeconds] = useState(7);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setSeconds((prev) => prev - 1);
-    }, 1000);
-
-    const timeout = setTimeout(() => {
-      window.location.href = "/";
-    }, 7000);
-
-    return () => {
-      clearInterval(interval);
-      clearTimeout(timeout);
-    };
-  }, []);
+  const popularCities = popularCitySlugs
+    .map((slug) => getCityBySlug(slug))
+    .filter((city): city is NonNullable<typeof city> => Boolean(city));
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background">
@@ -37,9 +33,22 @@ const NotFoundPage = () => {
           <Icon name="ArrowRight" size={16} className="rotate-180" />
           Вернуться на главную
         </Button>
-        <p className="text-muted-foreground text-sm mt-6">
-          Автоматический переход на главную через {seconds} сек.
-        </p>
+        <div className="mt-10">
+          <p className="text-muted-foreground text-sm mb-4">
+            Популярные города:
+          </p>
+          <div className="flex flex-wrap justify-center gap-2 max-w-md mx-auto">
+            {popularCities.map((city) => (
+              <a
+                key={city.slug}
+                href={`/${city.slug}`}
+                className="px-4 py-2 rounded-full border border-border text-sm font-medium text-foreground hover:bg-muted transition-colors"
+              >
+                {city.name}
+              </a>
+            ))}
+          </div>
+        </div>
       </div>
     </div>
   );
