@@ -25,6 +25,7 @@ def handler(event: dict, context) -> dict:
     phone = body.get('phone', '')
     language = body.get('language', '')
     lesson_type = body.get('type', '')
+    city = body.get('city', '')
 
     language_map = {
         'english': 'Английский',
@@ -38,6 +39,7 @@ def handler(event: dict, context) -> dict:
 
     language_ru = language_map.get(language, language)
     type_ru = type_map.get(lesson_type, lesson_type) if lesson_type else 'Не указан'
+    city_ru = city if city else 'Главная страница'
 
     smtp_user = 'hispania35@yandex.ru'
     smtp_password = os.environ['SMTP_PASSWORD']
@@ -45,7 +47,7 @@ def handler(event: dict, context) -> dict:
     msg = MIMEMultipart()
     msg['From'] = smtp_user
     msg['To'] = smtp_user
-    msg['Subject'] = f'Новая заявка с сайта — {name}'
+    msg['Subject'] = f'Новая заявка с сайта ({city_ru}) — {name}'
 
     html = f"""
     <h2>Новая заявка с сайта</h2>
@@ -54,6 +56,7 @@ def handler(event: dict, context) -> dict:
         <tr><td><b>Телефон:</b></td><td>{phone}</td></tr>
         <tr><td><b>Язык:</b></td><td>{language_ru}</td></tr>
         <tr><td><b>Формат:</b></td><td>{type_ru}</td></tr>
+        <tr><td><b>Город (страница):</b></td><td>{city_ru}</td></tr>
     </table>
     """
     msg.attach(MIMEText(html, 'html'))

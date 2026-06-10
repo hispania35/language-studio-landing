@@ -13,9 +13,10 @@ import { useToast } from "@/hooks/use-toast";
 
 interface BookingSectionProps {
   onlineOnly?: boolean;
+  city?: string;
 }
 
-const BookingSection = ({ onlineOnly = false }: BookingSectionProps) => {
+const BookingSection = ({ onlineOnly = false, city = "" }: BookingSectionProps) => {
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", phone: "", language: "", type: onlineOnly ? "online" : "" });
   const [loading, setLoading] = useState(false);
@@ -31,7 +32,7 @@ const BookingSection = ({ onlineOnly = false }: BookingSectionProps) => {
       const res = await fetch("https://functions.poehali.dev/274de1ff-48fd-46a1-bb99-5d28f14e6f38", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form),
+        body: JSON.stringify({ ...form, city }),
       });
       if (!res.ok) throw new Error();
       toast({ title: "Заявка отправлена! 🎉", description: "Мы свяжемся с вами в течение 30 минут" });

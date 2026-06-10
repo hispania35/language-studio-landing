@@ -8,7 +8,8 @@
         "name": "Тест Тестов",
         "phone": "+7 999 000 00 00",
         "language": "english",
-        "type": "online"
+        "type": "online",
+        "city": "Казань"
       },
       "expectedStatus": 200,
       "expectedBody": { "ok": true },

@@ -48,7 +48,7 @@ const CityPage = () => {
         <ReviewsSection />
         <CitySeoText city={city} />
         <FaqSection />
-        <BookingSection onlineOnly />
+        <BookingSection onlineOnly city={city.name} />
         <ContactsSection />
         <Footer />
         <CookieBanner />
