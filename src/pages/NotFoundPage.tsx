@@ -1,5 +1,6 @@
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
+import { useEffect, useState } from "react";
 import { getCityBySlug } from "@/data/cities";
 
 const popularCitySlugs = [
@@ -12,6 +13,23 @@ const popularCitySlugs = [
 ];
 
 const NotFoundPage = () => {
+  const [seconds, setSeconds] = useState(7);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setSeconds((prev) => prev - 1);
+    }, 1000);
+
+    const timeout = setTimeout(() => {
+      window.location.href = "/";
+    }, 7000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
+
   const popularCities = popularCitySlugs
     .map((slug) => getCityBySlug(slug))
     .filter((city): city is NonNullable<typeof city> => Boolean(city));
@@ -49,6 +67,9 @@ const NotFoundPage = () => {
             ))}
           </div>
         </div>
+        <p className="text-muted-foreground text-sm mt-8">
+          Автоматический переход на главную через {seconds} сек.
+        </p>
       </div>
     </div>
   );
