@@ -14,20 +14,20 @@ const CityDiscountBanner = ({ city }: CityDiscountBannerProps) => {
   return (
     <section className="py-16">
       <div className="container mx-auto px-4">
-        <div className="relative overflow-hidden rounded-3xl gradient-primary px-6 py-12 md:px-12 md:py-14 text-white shadow-xl">
-          <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-white/10 blur-2xl" />
-          <div className="absolute -bottom-12 -left-12 w-56 h-56 rounded-full bg-white/10 blur-2xl" />
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-purple-50 to-orange-50 border border-purple-100 px-6 py-12 md:px-12 md:py-14 shadow-sm transition-transform duration-500 hover:-translate-y-1">
+          <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full bg-purple-200/30 blur-2xl animate-float" />
+          <div className="absolute -bottom-12 -left-12 w-56 h-56 rounded-full bg-orange-200/25 blur-2xl animate-float-delay" />
 
           <div className="relative flex flex-col lg:flex-row items-center justify-between gap-8">
             <div className="text-center lg:text-left max-w-xl">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/20 text-sm font-medium mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-purple-100 text-purple-700 text-sm font-medium mb-4">
                 <Icon name="Gift" size={16} />
                 Скидка для жителей {city.nameGenitive}
               </div>
               <h2 className="font-heading font-800 text-3xl md:text-4xl mb-3">
                 Промокод на скидку за подписку
               </h2>
-              <p className="text-white/90 text-base md:text-lg">
+              <p className="text-muted-foreground text-base md:text-lg">
                 Подпишитесь на нашу группу ВКонтакте и получите персональный промокод
                 на скидку прямо на почту. Подходит для онлайн-обучения {city.nameIn}.
               </p>
@@ -36,7 +36,7 @@ const CityDiscountBanner = ({ city }: CityDiscountBannerProps) => {
             <Button
               size="lg"
               onClick={openDiscount}
-              className="bg-white text-purple-700 hover:bg-white/90 border-0 font-heading font-semibold text-base px-8 h-14 rounded-xl shrink-0"
+              className="gradient-primary text-white border-0 font-heading font-semibold text-base px-8 h-14 rounded-xl shrink-0 shadow-lg shadow-purple-500/30 hover:scale-105 transition-transform"
             >
               Получить промокод
               <Icon name="ArrowRight" size={20} />
