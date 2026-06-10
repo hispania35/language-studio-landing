@@ -6,6 +6,7 @@ import AboutSectionOnline from "@/components/AboutSectionOnline";
 import LanguagesSection from "@/components/LanguagesSection";
 import { getCityBySlug } from "@/data/cities";
 import { useMeta } from "@/hooks/useMeta";
+import { useJsonLd } from "@/hooks/useJsonLd";
 
 const PricingSection = lazy(() => import("@/components/PricingSection"));
 const TeachersSection = lazy(() => import("@/components/TeachersSection"));
@@ -31,6 +32,48 @@ const CityPage = () => {
       : "",
     canonical: city ? `https://hispania35.online/${city.slug}` : "https://hispania35.online/",
   });
+
+  const pageUrl = city ? `https://hispania35.online/${city.slug}` : "";
+
+  useJsonLd(
+    "city",
+    city
+      ? {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "EducationalOrganization",
+              "@id": `${pageUrl}#org`,
+              name: "Языковая студия Hispania",
+              url: pageUrl,
+              description: `Онлайн-курсы испанского, немецкого и английского языка для жителей ${city.nameGenitive}.`,
+              email: "hispania35@yandex.ru",
+              telephone: "+79211238221",
+              areaServed: { "@type": "City", name: city.name },
+              sameAs: ["https://vk.com/club119672828"],
+            },
+            {
+              "@type": "Course",
+              name: `Курсы иностранных языков ${city.nameIn} онлайн`,
+              description: `Испанский, немецкий и английский язык онлайн для жителей ${city.nameGenitive}. Мини-группы до 6 человек и индивидуальные занятия.`,
+              provider: { "@id": `${pageUrl}#org` },
+              hasCourseInstance: {
+                "@type": "CourseInstance",
+                courseMode: "online",
+                courseWorkload: "PT2H",
+              },
+            },
+            {
+              "@type": "BreadcrumbList",
+              itemListElement: [
+                { "@type": "ListItem", position: 1, name: "Главная", item: "https://hispania35.online/" },
+                { "@type": "ListItem", position: 2, name: city.name, item: pageUrl },
+              ],
+            },
+          ],
+        }
+      : null,
+  );
 
   if (!city) {
     return <Navigate to="/not-found" replace />;
