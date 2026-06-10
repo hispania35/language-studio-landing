@@ -11,6 +11,7 @@ import { useJsonLd } from "@/hooks/useJsonLd";
 const PricingSection = lazy(() => import("@/components/PricingSection"));
 const TeachersSection = lazy(() => import("@/components/TeachersSection"));
 const ReviewsSection = lazy(() => import("@/components/ReviewsSection"));
+const CityDiscountBanner = lazy(() => import("@/components/CityDiscountBanner"));
 const CitySeoText = lazy(() => import("@/components/CitySeoText"));
 const FaqSection = lazy(() => import("@/components/FaqSection"));
 const BookingSection = lazy(() => import("@/components/BookingSection"));
@@ -89,6 +90,7 @@ const CityPage = () => {
         <PricingSection />
         <TeachersSection />
         <ReviewsSection />
+        <CityDiscountBanner city={city} />
         <CitySeoText city={city} />
         <FaqSection />
         <BookingSection onlineOnly city={city.name} />

@@ -27,6 +27,9 @@ const Header = () => {
       setAskOpen(true);
       window.history.replaceState({}, "", window.location.pathname);
     }
+    const openHandler = () => setAskOpen(true);
+    window.addEventListener("open-discount", openHandler);
+    return () => window.removeEventListener("open-discount", openHandler);
   }, []);
 
   return (
