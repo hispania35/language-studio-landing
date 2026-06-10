@@ -1,13 +1,26 @@
 import Icon from "@/components/ui/icon";
 
-const contacts = [
+const baseContacts = [
   { icon: "Phone", label: "Телефон", value: "8 (921) 123-82-21", href: "tel:89211238221" },
   { icon: "Mail", label: "Email", value: "hispania35@yandex.ru", href: "mailto:hispania35@yandex.ru" },
   { icon: "MapPin", label: "Адрес", value: "г. Вологда, ул. Козленская, 43б, офис 10", href: "https://yandex.ru/maps/?text=Вологда%2C+ул.+Козленская%2C+43б" },
   { icon: "Clock", label: "Режим работы", value: "Пн-Сб: 9:00 — 21:00", href: "#" },
 ];
 
-const ContactsSection = () => {
+interface ContactsSectionProps {
+  city?: string;
+}
+
+const ContactsSection = ({ city }: ContactsSectionProps) => {
+  const contacts = city
+    ? [
+        { icon: "Phone", label: "Телефон", value: "8 (921) 123-82-21", href: "tel:89211238221" },
+        { icon: "Mail", label: "Email", value: "hispania35@yandex.ru", href: "mailto:hispania35@yandex.ru" },
+        { icon: "Monitor", label: `Формат — ${city}`, value: "Занятия только онлайн", href: "#booking" },
+        { icon: "Clock", label: "Режим работы", value: "Пн-Сб: 9:00 — 21:00", href: "#" },
+      ]
+    : baseContacts;
+
   const socials = [
     { icon: "Users", label: "ВКонтакте", href: "https://vk.com/club119672828" },
     { icon: "MessageCircle", label: "Макс", href: "https://max.ru/u/f9LHodD0cOKZsNO_3_ers42wYlOir_XREeTGJirv8m5T5FVHokYu5Ac6000" },

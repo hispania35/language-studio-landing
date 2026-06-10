@@ -49,7 +49,7 @@ const CityPage = () => {
         <CitySeoText city={city} />
         <FaqSection />
         <BookingSection onlineOnly city={city.name} />
-        <ContactsSection />
+        <ContactsSection city={city.name} />
         <Footer />
         <CookieBanner />
       </Suspense>
