@@ -11,9 +11,13 @@ import {
 import Icon from "@/components/ui/icon";
 import { useToast } from "@/hooks/use-toast";
 
-const BookingSection = () => {
+interface BookingSectionProps {
+  onlineOnly?: boolean;
+}
+
+const BookingSection = ({ onlineOnly = false }: BookingSectionProps) => {
   const { toast } = useToast();
-  const [form, setForm] = useState({ name: "", phone: "", language: "", type: "" });
+  const [form, setForm] = useState({ name: "", phone: "", language: "", type: onlineOnly ? "online" : "" });
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -31,7 +35,7 @@ const BookingSection = () => {
       });
       if (!res.ok) throw new Error();
       toast({ title: "Заявка отправлена! 🎉", description: "Мы свяжемся с вами в течение 30 минут" });
-      setForm({ name: "", phone: "", language: "", type: "" });
+      setForm({ name: "", phone: "", language: "", type: onlineOnly ? "online" : "" });
     } catch {
       toast({ title: "Ошибка отправки", description: "Попробуйте ещё раз или позвоните нам", variant: "destructive" });
     } finally {
@@ -129,18 +133,20 @@ const BookingSection = () => {
                   </Select>
                 </div>
 
-                <div>
-                  <label className="text-sm font-medium mb-2 block">Формат</label>
-                  <Select value={form.type} onValueChange={(value) => setForm({ ...form, type: value })}>
-                    <SelectTrigger className="h-12 rounded-xl">
-                      <SelectValue placeholder="Онлайн или оффлайн?" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="online">💻 Онлайн</SelectItem>
-                      <SelectItem value="offline">🏫 В студии</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
+                {!onlineOnly && (
+                  <div>
+                    <label className="text-sm font-medium mb-2 block">Формат</label>
+                    <Select value={form.type} onValueChange={(value) => setForm({ ...form, type: value })}>
+                      <SelectTrigger className="h-12 rounded-xl">
+                        <SelectValue placeholder="Онлайн или оффлайн?" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="online">💻 Онлайн</SelectItem>
+                        <SelectItem value="offline">🏫 В студии</SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                )}
 
                 <Button
                   type="submit"
