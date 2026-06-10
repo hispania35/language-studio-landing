@@ -1,6 +1,7 @@
 import { useState, useEffect, lazy, Suspense } from "react";
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
+import { useCity } from "@/hooks/useCity";
 
 const AskQuestionModal = lazy(() => import("@/components/AskQuestionModal"));
 
@@ -17,6 +18,7 @@ const navLinks = [
 const Header = () => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [askOpen, setAskOpen] = useState(false);
+  const city = useCity();
 
   useEffect(() => {
     if (window.location.search.includes("ask")) {
@@ -29,9 +31,17 @@ const Header = () => {
     <>
       <header className="fixed top-0 left-0 right-0 z-50 glass">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <a href="#about" className="font-heading font-900 text-2xl gradient-text">
-            Hispania
-          </a>
+          <div className="flex items-center gap-3">
+            <a href="#about" className="font-heading font-900 text-2xl gradient-text">
+              Hispania
+            </a>
+            {city && (
+              <span className="hidden sm:inline-flex items-center gap-1 text-sm font-medium text-foreground/60">
+                <Icon name="MapPin" size={14} />
+                {city}
+              </span>
+            )}
+          </div>
 
           <nav className="hidden md:flex items-center gap-8">
             {navLinks.map((link) => (
