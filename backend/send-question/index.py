@@ -4,8 +4,11 @@ import os
 import re
 import random
 import string
+import psycopg2
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
+
+PROMO_TABLE = 't_p27960186_language_studio_land.promo_codes'
 
 
 def _generate_promo() -> str:
@@ -43,7 +46,34 @@ def handler(event: dict, context) -> dict:
                 'body': json.dumps({'ok': False, 'error': 'invalid_email'}, ensure_ascii=False)
             }
 
-        promo = _generate_promo()
+        email_norm = email.lower()
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        conn.autocommit = True
+        try:
+            with conn.cursor() as cur:
+                email_sql = email_norm.replace("'", "''")
+                cur.execute(f"SELECT promo FROM {PROMO_TABLE} WHERE email = '{email_sql}'")
+                existing = cur.fetchone()
+
+                if existing:
+                    return {
+                        'statusCode': 200,
+                        'headers': {**cors, 'Content-Type': 'application/json'},
+                        'body': json.dumps(
+                            {'ok': False, 'error': 'already_issued', 'promo': existing[0]},
+                            ensure_ascii=False
+                        )
+                    }
+
+                promo = _generate_promo()
+                name_sql = name.replace("'", "''")
+                promo_sql = promo.replace("'", "''")
+                cur.execute(
+                    f"INSERT INTO {PROMO_TABLE} (email, promo, name) "
+                    f"VALUES ('{email_sql}', '{promo_sql}', '{name_sql}')"
+                )
+        finally:
+            conn.close()
 
         # письмо клиенту с промокодом
         client_msg = MIMEMultipart()

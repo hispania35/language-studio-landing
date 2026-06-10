@@ -13,6 +13,8 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
   const [form, setForm] = useState({ name: "", email: "" });
   const [loading, setLoading] = useState(false);
   const [sent, setSent] = useState(false);
+  const [alreadyIssued, setAlreadyIssued] = useState(false);
+  const [issuedPromo, setIssuedPromo] = useState("");
   const [error, setError] = useState("");
 
   if (!open) return null;
@@ -27,8 +29,15 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mode: "promo", name: form.name, email: form.email }),
       });
-      if (!res.ok) {
+      const data = await res.json().catch(() => ({}));
+
+      if (!res.ok && data?.error !== "already_issued") {
         setError("Проверьте правильность Email и попробуйте ещё раз");
+        return;
+      }
+      if (data?.error === "already_issued") {
+        setIssuedPromo(data.promo || "");
+        setAlreadyIssued(true);
         return;
       }
       setSent(true);
@@ -42,6 +51,8 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
 
   const close = () => {
     setSent(false);
+    setAlreadyIssued(false);
+    setIssuedPromo("");
     setError("");
     onClose();
   };
@@ -72,6 +83,19 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
             <p className="text-muted-foreground">
               Проверьте почту — мы отправили персональный промокод на скидку. Если письма нет, загляните в папку «Спам».
             </p>
+          </div>
+        ) : alreadyIssued ? (
+          <div className="text-center py-8">
+            <div className="w-16 h-16 rounded-full bg-orange-100 flex items-center justify-center mx-auto mb-4">
+              <Icon name="Info" size={32} className="text-orange-600" />
+            </div>
+            <h3 className="font-heading font-800 text-2xl mb-2">Промокод уже получен</h3>
+            <p className="text-muted-foreground mb-3">
+              На этот email мы уже отправляли промокод — получить его можно только один раз.
+            </p>
+            {issuedPromo && (
+              <p className="font-heading font-bold text-xl tracking-wide gradient-text">{issuedPromo}</p>
+            )}
           </div>
         ) : (
           <>
