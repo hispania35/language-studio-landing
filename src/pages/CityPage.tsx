@@ -1,5 +1,6 @@
 import { lazy, Suspense } from "react";
-import { useLocation, Navigate } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import NotFoundPage from "@/pages/NotFoundPage";
 import Header from "@/components/Header";
 import CityHero from "@/components/CityHero";
 import AboutSectionOnline from "@/components/AboutSectionOnline";
@@ -77,7 +78,7 @@ const CityPage = () => {
   );
 
   if (!city) {
-    return <Navigate to="/not-found" replace />;
+    return <NotFoundPage />;
   }
 
   return (
