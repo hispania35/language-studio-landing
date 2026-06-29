@@ -59,11 +59,20 @@ const CityPage = () => {
               name: `Курсы иностранных языков ${city.nameIn} онлайн`,
               description: `Испанский, немецкий и английский язык онлайн для жителей ${city.nameGenitive}. Мини-группы до 6 человек и индивидуальные занятия.`,
               provider: { "@id": `${pageUrl}#org` },
-              hasCourseInstance: {
-                "@type": "CourseInstance",
-                courseMode: "online",
-                courseWorkload: "PT2H",
-              },
+              hasCourseInstance: [
+                {
+                  "@type": "CourseInstance",
+                  name: "Групповые занятия в мини-группах",
+                  courseMode: "online",
+                  courseWorkload: "PT2H",
+                },
+                {
+                  "@type": "CourseInstance",
+                  name: "Индивидуальные занятия один на один",
+                  courseMode: "online",
+                  courseWorkload: "PT1H",
+                },
+              ],
             },
             {
               "@type": "BreadcrumbList",
