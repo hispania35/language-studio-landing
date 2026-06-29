@@ -31,9 +31,15 @@ const Footer = () => {
               © 2026 Hispania. Все права защищены.<br />
               ИНН 352527263810
             </p>
-            <a href="/oferta" className="text-xs text-muted-foreground hover:text-foreground transition-colors underline underline-offset-2">
-              Договор-оферта
-            </a>
+            <div className="flex items-center gap-2 text-xs text-muted-foreground">
+              <a href="/oferta" className="hover:text-foreground transition-colors underline underline-offset-2">
+                Договор-оферта
+              </a>
+              <span className="text-muted-foreground/50">·</span>
+              <a href="/sitemap.xml" className="hover:text-foreground transition-colors underline underline-offset-2">
+                Карта сайта
+              </a>
+            </div>
           </div>
           <button
             onClick={handleShare}
