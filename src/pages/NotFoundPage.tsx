@@ -14,21 +14,24 @@ const popularCitySlugs = [
 
 const NotFoundPage = () => {
   const [seconds, setSeconds] = useState(7);
+  const [paused, setPaused] = useState(false);
 
   useEffect(() => {
+    if (paused) return;
+
     const interval = setInterval(() => {
       setSeconds((prev) => prev - 1);
     }, 1000);
 
     const timeout = setTimeout(() => {
       window.location.href = "/";
-    }, 7000);
+    }, seconds * 1000);
 
     return () => {
       clearInterval(interval);
       clearTimeout(timeout);
     };
-  }, []);
+  }, [paused]);
 
   const popularCities = popularCitySlugs
     .map((slug) => getCityBySlug(slug))
@@ -55,7 +58,11 @@ const NotFoundPage = () => {
           <p className="text-muted-foreground text-sm mb-4">
             Популярные города:
           </p>
-          <div className="flex flex-wrap justify-center gap-2 max-w-md mx-auto">
+          <div
+            className="flex flex-wrap justify-center gap-2 max-w-md mx-auto"
+            onMouseEnter={() => setPaused(true)}
+            onMouseLeave={() => setPaused(false)}
+          >
             {popularCities.map((city) => (
               <a
                 key={city.slug}
@@ -68,7 +75,9 @@ const NotFoundPage = () => {
           </div>
         </div>
         <p className="text-muted-foreground text-sm mt-8">
-          Автоматический переход на главную через {seconds} сек.
+          {paused
+            ? "Отсчёт на паузе — выберите город"
+            : `Автоматический переход на главную через ${seconds} сек.`}
         </p>
       </div>
     </div>
