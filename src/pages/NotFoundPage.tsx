@@ -1,7 +1,8 @@
 import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
 import Icon from "@/components/ui/icon";
 import { useEffect, useState } from "react";
-import { getCityBySlug } from "@/data/cities";
+import { cities, getCityBySlug } from "@/data/cities";
 
 const popularCitySlugs = [
   "moskva",
@@ -15,6 +16,18 @@ const popularCitySlugs = [
 const NotFoundPage = () => {
   const [seconds, setSeconds] = useState(7);
   const [paused, setPaused] = useState(false);
+  const [query, setQuery] = useState("");
+
+  const normalizedQuery = query.trim().toLowerCase();
+  const searchResults = normalizedQuery
+    ? cities
+        .filter(
+          (city) =>
+            city.name.toLowerCase().includes(normalizedQuery) ||
+            city.aliases.some((alias) => alias.includes(normalizedQuery)),
+        )
+        .slice(0, 6)
+    : [];
 
   useEffect(() => {
     if (paused) return;
@@ -54,7 +67,45 @@ const NotFoundPage = () => {
           <Icon name="ArrowRight" size={16} className="rotate-180" />
           Вернуться на главную
         </Button>
-        <div className="mt-10">
+        <div
+          className="mt-10 max-w-md mx-auto relative"
+          onMouseEnter={() => setPaused(true)}
+          onMouseLeave={() => setPaused(false)}
+        >
+          <div className="relative">
+            <Icon
+              name="Search"
+              size={18}
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+            />
+            <Input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onFocus={() => setPaused(true)}
+              placeholder="Найдите свой город"
+              className="pl-10"
+            />
+          </div>
+          {searchResults.length > 0 && (
+            <div className="mt-2 rounded-lg border border-border bg-background shadow-lg overflow-hidden text-left">
+              {searchResults.map((city) => (
+                <a
+                  key={city.slug}
+                  href={`/${city.slug}`}
+                  className="block px-4 py-2 text-sm text-foreground hover:bg-muted transition-colors"
+                >
+                  {city.name}
+                </a>
+              ))}
+            </div>
+          )}
+          {normalizedQuery && searchResults.length === 0 && (
+            <p className="mt-2 text-sm text-muted-foreground">
+              Город не найден
+            </p>
+          )}
+        </div>
+        <div className="mt-8">
           <p className="text-muted-foreground text-sm mb-4">
             Популярные города:
           </p>
