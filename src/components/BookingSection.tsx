@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { Checkbox } from "@/components/ui/checkbox";
 import {
   Select,
   SelectContent,
@@ -19,12 +20,17 @@ interface BookingSectionProps {
 const BookingSection = ({ onlineOnly = false, city = "" }: BookingSectionProps) => {
   const { toast } = useToast();
   const [form, setForm] = useState({ name: "", phone: "", language: "", type: onlineOnly ? "online" : "" });
+  const [agree, setAgree] = useState(false);
   const [loading, setLoading] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!form.name || !form.phone || !form.language) {
       toast({ title: "Заполните все обязательные поля", variant: "destructive" });
+      return;
+    }
+    if (!agree) {
+      toast({ title: "Подтвердите согласие на обработку персональных данных", variant: "destructive" });
       return;
     }
     setLoading(true);
@@ -37,6 +43,7 @@ const BookingSection = ({ onlineOnly = false, city = "" }: BookingSectionProps) 
       if (!res.ok) throw new Error();
       toast({ title: "Заявка отправлена! 🎉", description: "Мы свяжемся с вами в течение 30 минут" });
       setForm({ name: "", phone: "", language: "", type: onlineOnly ? "online" : "" });
+      setAgree(false);
     } catch {
       toast({ title: "Ошибка отправки", description: "Попробуйте ещё раз или позвоните нам", variant: "destructive" });
     } finally {
@@ -149,9 +156,24 @@ const BookingSection = ({ onlineOnly = false, city = "" }: BookingSectionProps) 
                   </div>
                 )}
 
+                <div className="flex items-start gap-3 pt-1">
+                  <Checkbox
+                    id="booking-agree"
+                    checked={agree}
+                    onCheckedChange={(checked) => setAgree(checked === true)}
+                    className="mt-0.5"
+                  />
+                  <label htmlFor="booking-agree" className="text-xs text-muted-foreground leading-relaxed cursor-pointer">
+                    Я согласен на обработку персональных данных и принимаю{" "}
+                    <a href="/privacy" target="_blank" className="underline hover:text-foreground transition-colors">
+                      политику конфиденциальности
+                    </a>
+                  </label>
+                </div>
+
                 <Button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || !agree}
                   className="w-full gradient-primary text-white border-0 font-heading font-semibold h-14 rounded-xl text-base mt-2"
                 >
                   {loading ? (
@@ -167,13 +189,6 @@ const BookingSection = ({ onlineOnly = false, city = "" }: BookingSectionProps) 
                   )}
                 </Button>
               </div>
-
-              <p className="text-xs text-muted-foreground text-center mt-4">
-                Нажимая кнопку, вы соглашаетесь с{" "}
-                <a href="/privacy" target="_blank" className="underline hover:text-foreground transition-colors">
-                  политикой обработки данных
-                </a>
-              </p>
             </form>
           </div>
         </div>
