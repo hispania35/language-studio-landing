@@ -97,7 +97,7 @@ const CityPage = () => {
       <AboutSectionOnline />
       <LanguagesSection />
       <Suspense fallback={null}>
-        <PricingSection />
+        <PricingSection currency={city.country === "by" ? "byn" : "rub"} />
         <TeachersSection />
         <ReviewsSection />
         <CityDiscountBanner city={city} />

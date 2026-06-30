@@ -246,7 +246,7 @@ const BelarusPage = () => {
       </section>
 
       <Suspense fallback={null}>
-        <PricingSection />
+        <PricingSection currency="byn" />
         <TeachersSection />
         <ReviewsSection />
         <FaqSection />

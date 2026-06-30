@@ -1,12 +1,28 @@
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
 
-const plans = [
+interface Plan {
+  name: string;
+  description: string;
+  price: string;
+  oldPrice?: string;
+  priceByn: string;
+  oldPriceByn?: string;
+  unit: string;
+  gradient: string;
+  features: string[];
+  popular: boolean;
+  cta: string;
+}
+
+const plans: Plan[] = [
   {
     name: "Старт",
     description: "Для тех, кто только начинает",
     price: "1 200",
     oldPrice: "1 500",
+    priceByn: "45",
+    oldPriceByn: "55",
     unit: "урок",
     gradient: "gradient-card-blue",
     features: [
@@ -22,6 +38,7 @@ const plans = [
     name: "Стандарт",
     description: "Оптимальный темп прогресса",
     price: "2 200",
+    priceByn: "80",
     unit: "урок",
     gradient: "gradient-card-purple",
     features: [
@@ -38,6 +55,7 @@ const plans = [
     name: "Групповой",
     description: "От 3 человек — учиться веселее вместе",
     price: "800",
+    priceByn: "30",
     unit: "урок",
     gradient: "gradient-card-orange",
     features: [
@@ -52,7 +70,13 @@ const plans = [
   },
 ];
 
-const PricingSection = () => {
+interface PricingSectionProps {
+  currency?: "rub" | "byn";
+}
+
+const PricingSection = ({ currency = "rub" }: PricingSectionProps) => {
+  const byn = currency === "byn";
+  const symbol = byn ? "Br" : "₽";
   return (
     <section id="pricing" className="py-24 bg-muted/30">
       <div className="container mx-auto px-4">
@@ -85,10 +109,12 @@ const PricingSection = () => {
               <p className="text-muted-foreground text-sm mb-6">{plan.description}</p>
 
               <div className="mb-6">
-                {"oldPrice" in plan && (
-                  <div className="text-muted-foreground text-sm line-through mb-1">{plan.oldPrice} ₽</div>
+                {(byn ? plan.oldPriceByn : plan.oldPrice) && (
+                  <div className="text-muted-foreground text-sm line-through mb-1">
+                    {byn ? plan.oldPriceByn : plan.oldPrice} {symbol}
+                  </div>
                 )}
-                <span className="font-heading font-800 text-4xl">{plan.price} ₽</span>
+                <span className="font-heading font-800 text-4xl">{byn ? plan.priceByn : plan.price} {symbol}</span>
                 <span className="text-muted-foreground text-sm ml-1">/ {plan.unit}</span>
               </div>
 
