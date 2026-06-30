@@ -10,6 +10,7 @@ const Index = lazy(() => import("./pages/Index"));
 const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Oferta = lazy(() => import("./pages/Oferta"));
 const CityPage = lazy(() => import("./pages/CityPage"));
+const BelarusPage = lazy(() => import("./pages/BelarusPage"));
 const NotFound = lazy(() => import("./pages/NotFoundPage"));
 
 const queryClient = new QueryClient();
@@ -25,6 +26,7 @@ const App = () => (
             <Route path="/" element={<Index />} />
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/oferta" element={<Oferta />} />
+            <Route path="/belarus" element={<BelarusPage />} />
             {citySlugs.map((slug) => (
               <Route key={slug} path={`/${slug}`} element={<CityPage />} />
             ))}

@@ -4,6 +4,7 @@ export interface CityData {
   nameIn: string;
   nameGenitive: string;
   aliases: string[];
+  country?: "ru" | "by";
 }
 
 export const cities: CityData[] = [
@@ -58,9 +59,17 @@ export const cities: CityData[] = [
   { slug: "bryansk", name: "Брянск", nameIn: "в Брянске", nameGenitive: "Брянска", aliases: ["брянск", "bryansk"] },
   { slug: "belgorod", name: "Белгород", nameIn: "в Белгороде", nameGenitive: "Белгорода", aliases: ["белгород", "belgorod"] },
   { slug: "surgut", name: "Сургут", nameIn: "в Сургуте", nameGenitive: "Сургута", aliases: ["сургут", "surgut"] },
+  { slug: "minsk", name: "Минск", nameIn: "в Минске", nameGenitive: "Минска", aliases: ["минск", "minsk"], country: "by" },
+  { slug: "gomel", name: "Гомель", nameIn: "в Гомеле", nameGenitive: "Гомеля", aliases: ["гомель", "gomel", "homyel"], country: "by" },
+  { slug: "brest", name: "Брест", nameIn: "в Бресте", nameGenitive: "Бреста", aliases: ["брест", "brest"], country: "by" },
+  { slug: "vitebsk", name: "Витебск", nameIn: "в Витебске", nameGenitive: "Витебска", aliases: ["витебск", "vitebsk"], country: "by" },
+  { slug: "grodno", name: "Гродно", nameIn: "в Гродно", nameGenitive: "Гродно", aliases: ["гродно", "grodno", "hrodna"], country: "by" },
+  { slug: "mogilev", name: "Могилёв", nameIn: "в Могилёве", nameGenitive: "Могилёва", aliases: ["могилёв", "могилев", "mogilev", "mahilyow"], country: "by" },
 ];
 
 export const citySlugs = cities.map((c) => c.slug);
+
+export const belarusCities = cities.filter((c) => c.country === "by");
 
 export const getCityBySlug = (slug?: string): CityData | undefined =>
   cities.find((c) => c.slug === slug);
