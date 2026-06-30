@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
+import { Checkbox } from "@/components/ui/checkbox";
 import Icon from "@/components/ui/icon";
 
 interface AskQuestionModalProps {
@@ -16,6 +17,7 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
   const [alreadyIssued, setAlreadyIssued] = useState(false);
   const [issuedPromo, setIssuedPromo] = useState("");
   const [subscribed, setSubscribed] = useState(false);
+  const [agree, setAgree] = useState(false);
   const [error, setError] = useState("");
 
   if (!open) return null;
@@ -25,6 +27,10 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
     setError("");
     if (!subscribed) {
       setError("Сначала нажмите «Подписаться на группу ВК»");
+      return;
+    }
+    if (!agree) {
+      setError("Подтвердите согласие на обработку персональных данных");
       return;
     }
     setLoading(true);
@@ -47,6 +53,7 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
       }
       setSent(true);
       setForm({ name: "", email: "" });
+      setAgree(false);
     } catch {
       setError("Не удалось отправить. Попробуйте ещё раз");
     } finally {
@@ -59,6 +66,7 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
     setAlreadyIssued(false);
     setIssuedPromo("");
     setSubscribed(false);
+    setAgree(false);
     setError("");
     onClose();
   };
@@ -153,10 +161,24 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
                   className="w-full h-11 px-4 rounded-xl border border-border bg-muted/50 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30"
                 />
               </div>
+              <div className="flex items-start gap-3">
+                <Checkbox
+                  id="promo-agree"
+                  checked={agree}
+                  onCheckedChange={(checked) => setAgree(checked === true)}
+                  className="mt-0.5"
+                />
+                <label htmlFor="promo-agree" className="text-xs text-muted-foreground leading-relaxed cursor-pointer">
+                  Я согласен на обработку персональных данных и принимаю{" "}
+                  <a href="/privacy" target="_blank" className="underline hover:text-foreground transition-colors">
+                    политику конфиденциальности
+                  </a>
+                </label>
+              </div>
               {error && <p className="text-sm text-destructive">{error}</p>}
               <Button
                 type="submit"
-                disabled={loading}
+                disabled={loading || !agree}
                 className="w-full gradient-primary text-white border-0 font-heading font-semibold rounded-xl h-12"
               >
                 {loading ? (
@@ -172,10 +194,7 @@ const AskQuestionModal = ({ open, onClose }: AskQuestionModalProps) => {
                 )}
               </Button>
               <p className="text-xs text-muted-foreground text-center">
-                Нажимая кнопку, вы подтверждаете подписку на группу и соглашаетесь с{" "}
-                <a href="/privacy" target="_blank" className="underline hover:text-foreground transition-colors">
-                  политикой обработки данных
-                </a>
+                Нажимая кнопку, вы подтверждаете подписку на группу
               </p>
             </form>
           </>
