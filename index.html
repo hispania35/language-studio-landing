@@ -14,6 +14,7 @@
     <meta name="yandex" content="index, follow"/>
     <meta name="zen-verification" content="qsxcXmPYuOcQW80fbOvaHNXt0EezMHbL5d3a8TMtYkJRnHCpY9RNOtuBXJQs8OdD" />
     <meta name="google-site-verification" content="cVRgqYR3dnu5XRrRqczC189uyMOr9y7aEFXXsnhtWuA" />
+    <link rel="canonical" href="https://hispania35.online/"/>
     <script>
     (function () {
       var SITE = "https://hispania35.online";
@@ -41,18 +42,14 @@
         "vitebsk":["в Витебске","Витебска"],"grodno":["в Гродно","Гродно"],"mogilev":["в Могилёве","Могилёва"]
       };
       var slug = location.pathname.replace(/^\/+|\/+$/g, "");
-      var url = SITE + "/" + slug;
       var title, desc;
-      if (slug === "") {
-        url = SITE + "/";
-      } else if (slug === "belarus") {
+      if (slug === "belarus") {
         title = "Курсы испанского, немецкого, английского в Беларуси онлайн | Hispania";
         desc = "Онлайн-курсы иностранных языков в Беларуси: испанский, немецкий, английский для жителей Минска, Гомеля, Бреста и других городов. Мини-группы и индивидуальные занятия, первое занятие бесплатно.";
       } else if (C[slug]) {
         title = "Курсы испанского, немецкого, английского " + C[slug][0] + " онлайн | Hispania";
         desc = "Курсы иностранных языков " + C[slug][0] + " онлайн: испанский, немецкий, английский. Мини-группы до 6 человек и индивидуальные занятия, опытные преподаватели, первое занятие бесплатно.";
       }
-      document.write('<link rel="canonical" href="' + url + '"/>');
       if (title) {
         var set = function (sel, attr, val) {
           var el = document.head.querySelector(sel);
@@ -62,7 +59,6 @@
         set('meta[name="description"]', "content", desc);
         set('meta[property="og:title"]', "content", title);
         set('meta[property="og:description"]', "content", desc);
-        set('meta[property="og:url"]', "content", url);
       }
     })();
     </script>

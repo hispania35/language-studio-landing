@@ -32,7 +32,7 @@ const CityPage = () => {
     description: city
       ? `Курсы иностранных языков ${city.nameIn} онлайн: испанский, немецкий, английский. Мини-группы до 6 человек и индивидуальные занятия, опытные преподаватели, первое занятие бесплатно.`
       : "",
-    canonical: city ? `https://hispania35.online/${city.slug}` : "https://hispania35.online/",
+    canonical: "https://hispania35.online/",
   });
 
   const pageUrl = city ? `https://hispania35.online/${city.slug}` : "";
