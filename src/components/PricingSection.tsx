@@ -1,12 +1,13 @@
 import { Button } from "@/components/ui/button";
 import Icon from "@/components/ui/icon";
-import { plans } from "@/data/pricing";
+import { usePricing } from "@/hooks/usePricing";
 
 interface PricingSectionProps {
   currency?: "rub" | "byn";
 }
 
 const PricingSection = ({ currency = "rub" }: PricingSectionProps) => {
+  const plans = usePricing();
   const byn = currency === "byn";
   const symbol = byn ? "Br" : "₽";
   return (

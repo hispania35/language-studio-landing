@@ -9,6 +9,7 @@ from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 PROMO_TABLE = 't_p27960186_language_studio_land.promo_codes'
+PRICING_TABLE = 't_p27960186_language_studio_land.pricing_plans'
 
 
 def _generate_promo() -> str:
@@ -16,21 +17,107 @@ def _generate_promo() -> str:
     return f'Hispania{suffix}'
 
 
+def _row_to_plan(row):
+    features = [f for f in (row[9] or '').split('|') if f]
+    return {
+        'name': row[1],
+        'description': row[2],
+        'price': row[3],
+        'oldPrice': row[4],
+        'priceByn': row[5],
+        'oldPriceByn': row[6],
+        'unit': row[7],
+        'gradient': row[8],
+        'features': features,
+        'popular': row[10],
+        'cta': row[11],
+    }
+
+
+def _get_plans(cur):
+    cur.execute(
+        f'SELECT id, name, description, price, old_price, price_byn, old_price_byn, '
+        f'unit, gradient, features, popular, cta '
+        f'FROM {PRICING_TABLE} ORDER BY sort_order, id'
+    )
+    return [_row_to_plan(r) for r in cur.fetchall()]
+
+
 def handler(event: dict, context) -> dict:
-    """Отправляет вопрос с сайта или выдаёт промокод за подписку на ВК"""
+    """Вопросы с сайта, промокоды за подписку и управление ценами (тарифами)"""
 
     cors = {
         'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Password',
         'Access-Control-Max-Age': '86400'
     }
 
     if event.get('httpMethod') == 'OPTIONS':
         return {'statusCode': 200, 'headers': cors, 'body': ''}
 
+    if event.get('httpMethod') == 'GET':
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        try:
+            with conn.cursor() as cur:
+                plans = _get_plans(cur)
+        finally:
+            conn.close()
+        return {
+            'statusCode': 200,
+            'headers': {**cors, 'Content-Type': 'application/json'},
+            'body': json.dumps({'plans': plans}, ensure_ascii=False)
+        }
+
     body = json.loads(event.get('body', '{}'))
     mode = body.get('mode', 'question')
+
+    if mode == 'pricing_save':
+        headers = event.get('headers') or {}
+        password = headers.get('X-Admin-Password') or headers.get('x-admin-password')
+        if not password or password != os.environ.get('ADMIN_PASSWORD'):
+            return {
+                'statusCode': 401,
+                'headers': {**cors, 'Content-Type': 'application/json'},
+                'body': json.dumps({'ok': False, 'error': 'Неверный пароль'}, ensure_ascii=False)
+            }
+
+        plans = body.get('plans', [])
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        try:
+            with conn.cursor() as cur:
+                cur.execute(f'DELETE FROM {PRICING_TABLE}')
+                for i, p in enumerate(plans):
+                    features = '|'.join(p.get('features', []))
+                    cur.execute(
+                        f'INSERT INTO {PRICING_TABLE} '
+                        f'(sort_order, name, description, price, old_price, price_byn, '
+                        f'old_price_byn, unit, gradient, features, popular, cta) '
+                        f'VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)',
+                        (
+                            i + 1,
+                            p.get('name', ''),
+                            p.get('description', ''),
+                            p.get('price', ''),
+                            p.get('oldPrice', ''),
+                            p.get('priceByn', ''),
+                            p.get('oldPriceByn', ''),
+                            p.get('unit', 'урок'),
+                            p.get('gradient', 'gradient-card-blue'),
+                            features,
+                            bool(p.get('popular', False)),
+                            p.get('cta', 'Выбрать'),
+                        ),
+                    )
+                conn.commit()
+                result = _get_plans(cur)
+        finally:
+            conn.close()
+        return {
+            'statusCode': 200,
+            'headers': {**cors, 'Content-Type': 'application/json'},
+            'body': json.dumps({'ok': True, 'plans': result}, ensure_ascii=False)
+        }
 
     smtp_user = 'hispania35@yandex.ru'
     smtp_password = os.environ['SMTP_PASSWORD']

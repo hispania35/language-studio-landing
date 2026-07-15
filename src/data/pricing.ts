@@ -68,3 +68,6 @@ export const plans: Plan[] = [
 ];
 
 export const groupPrice = plans.find((p) => p.name === "Групповой")!.price;
+
+export const PRICING_API =
+  "https://functions.poehali.dev/a9b287a8-a09a-4581-9cbd-877c2f9f2cf2";

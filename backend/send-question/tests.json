@@ -23,6 +23,23 @@
       "expectedStatus": 400,
       "expectedBody": {"ok": false},
       "bodyMatcher": "partial"
+    },
+    {
+      "name": "Получение тарифов",
+      "method": "GET",
+      "path": "/",
+      "expectedStatus": 200,
+      "expectedBody": {"plans": "array"},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Сохранение цен без пароля отклоняется",
+      "method": "POST",
+      "path": "/",
+      "body": {"mode": "pricing_save", "plans": []},
+      "expectedStatus": 401,
+      "expectedBody": {"ok": false},
+      "bodyMatcher": "partial"
     }
   ]
 }

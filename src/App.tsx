@@ -11,6 +11,7 @@ const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
 const Oferta = lazy(() => import("./pages/Oferta"));
 const CityPage = lazy(() => import("./pages/CityPage"));
 const BelarusPage = lazy(() => import("./pages/BelarusPage"));
+const AdminPricing = lazy(() => import("./pages/AdminPricing"));
 const NotFound = lazy(() => import("./pages/NotFoundPage"));
 
 const queryClient = new QueryClient();
@@ -27,6 +28,7 @@ const App = () => (
             <Route path="/privacy" element={<PrivacyPolicy />} />
             <Route path="/oferta" element={<Oferta />} />
             <Route path="/belarus" element={<BelarusPage />} />
+            <Route path="/admin" element={<AdminPricing />} />
             {citySlugs.map((slug) => (
               <Route key={slug} path={`/${slug}`} element={<CityPage />} />
             ))}
