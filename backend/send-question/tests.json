@@ -33,10 +33,19 @@
       "bodyMatcher": "partial"
     },
     {
-      "name": "Сохранение цен без пароля отклоняется",
+      "name": "Сохранение цен без токена отклоняется",
       "method": "POST",
       "path": "/",
       "body": {"mode": "pricing_save", "plans": []},
+      "expectedStatus": 401,
+      "expectedBody": {"ok": false},
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Подтверждение входа с неверным кодом отклоняется",
+      "method": "POST",
+      "path": "/",
+      "body": {"mode": "admin_login_verify", "code": "00000000"},
       "expectedStatus": 401,
       "expectedBody": {"ok": false},
       "bodyMatcher": "partial"

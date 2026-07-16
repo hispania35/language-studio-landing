@@ -4,17 +4,96 @@ import os
 import re
 import random
 import string
+import hashlib
+import hmac
+import time
+import base64
 import psycopg2
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
 
 PROMO_TABLE = 't_p27960186_language_studio_land.promo_codes'
 PRICING_TABLE = 't_p27960186_language_studio_land.pricing_plans'
+SETTINGS_TABLE = 't_p27960186_language_studio_land.admin_settings'
+CODES_TABLE = 't_p27960186_language_studio_land.admin_codes'
+ADMIN_EMAIL = 'hispania35@yandex.ru'
+SESSION_TTL = 8 * 3600  # 8 часов
 
 
 def _generate_promo() -> str:
     suffix = ''.join(random.choices(string.ascii_uppercase + string.digits, k=4))
     return f'Hispania{suffix}'
+
+
+def _hash_password(password: str) -> str:
+    return hashlib.sha256(('hispania_salt_v1' + password).encode()).hexdigest()
+
+
+def _check_password(cur, password: str) -> bool:
+    if not password:
+        return False
+    cur.execute(f'SELECT password_hash FROM {SETTINGS_TABLE} WHERE id = 1')
+    row = cur.fetchone()
+    stored = row[0] if row else None
+    if stored:
+        return hmac.compare_digest(stored, _hash_password(password))
+    # пароль в БД ещё не задан — сверяем с секретом ADMIN_PASSWORD
+    env_pwd = os.environ.get('ADMIN_PASSWORD')
+    return bool(env_pwd) and hmac.compare_digest(env_pwd, password)
+
+
+def _session_secret() -> bytes:
+    base = os.environ.get('ADMIN_PASSWORD', '') + os.environ.get('SMTP_PASSWORD', '')
+    return hashlib.sha256(('sess::' + base).encode()).digest()
+
+
+def _make_token() -> str:
+    exp = int(time.time()) + SESSION_TTL
+    payload = str(exp).encode()
+    sig = hmac.new(_session_secret(), payload, hashlib.sha256).digest()
+    raw = payload + b'.' + base64.urlsafe_b64encode(sig)
+    return base64.urlsafe_b64encode(raw).decode()
+
+
+def _check_token(token: str) -> bool:
+    try:
+        raw = base64.urlsafe_b64decode(token.encode())
+        payload, sig_b64 = raw.split(b'.', 1)
+        exp = int(payload.decode())
+        if exp < int(time.time()):
+            return False
+        expected = hmac.new(_session_secret(), payload, hashlib.sha256).digest()
+        return hmac.compare_digest(base64.urlsafe_b64decode(sig_b64), expected)
+    except Exception:
+        return False
+
+
+def _gen_code() -> str:
+    return ''.join(random.choices(string.digits, k=8))
+
+
+def _send_code_email(smtp_password: str, code: str, purpose: str) -> None:
+    if purpose == 'reset':
+        subject = 'Код для сброса пароля — Hispania'
+        intro = 'Вы запросили сброс пароля в админ-панели.'
+    else:
+        subject = 'Код для входа в админ-панель — Hispania'
+        intro = 'Вы входите в админ-панель управления ценами.'
+    msg = MIMEMultipart()
+    msg['From'] = ADMIN_EMAIL
+    msg['To'] = ADMIN_EMAIL
+    msg['Subject'] = subject
+    html = f"""
+    <h2>{subject}</h2>
+    <p>{intro}</p>
+    <p>Ваш одноразовый код:</p>
+    <p style="font-size:32px;font-weight:bold;letter-spacing:6px;color:#7c3aed;">{code}</p>
+    <p>Код действует 10 минут. Если вы этого не запрашивали — просто проигнорируйте письмо.</p>
+    """
+    msg.attach(MIMEText(html, 'html'))
+    with smtplib.SMTP_SSL('smtp.yandex.ru', 465) as server:
+        server.login(ADMIN_EMAIL, smtp_password)
+        server.send_message(msg)
 
 
 def _row_to_plan(row):
@@ -49,7 +128,7 @@ def handler(event: dict, context) -> dict:
     cors = {
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Password',
+        'Access-Control-Allow-Headers': 'Content-Type, X-Admin-Token',
         'Access-Control-Max-Age': '86400'
     }
 
@@ -71,15 +150,133 @@ def handler(event: dict, context) -> dict:
 
     body = json.loads(event.get('body', '{}'))
     mode = body.get('mode', 'question')
+    headers = event.get('headers') or {}
+
+    # --- Шаг 1 входа: проверяем пароль и отправляем 8-значный код на почту ---
+    if mode == 'admin_login_request':
+        password = body.get('password', '')
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        conn.autocommit = True
+        try:
+            with conn.cursor() as cur:
+                if not _check_password(cur, password):
+                    return {
+                        'statusCode': 401,
+                        'headers': {**cors, 'Content-Type': 'application/json'},
+                        'body': json.dumps({'ok': False, 'error': 'Неверный пароль'}, ensure_ascii=False)
+                    }
+                code = _gen_code()
+                cur.execute(
+                    f"INSERT INTO {CODES_TABLE} (purpose, code, expires_at) "
+                    f"VALUES ('login', %s, now() + interval '10 minutes')",
+                    (code,)
+                )
+        finally:
+            conn.close()
+        _send_code_email(os.environ['SMTP_PASSWORD'], code, 'login')
+        return {
+            'statusCode': 200,
+            'headers': {**cors, 'Content-Type': 'application/json'},
+            'body': json.dumps({'ok': True}, ensure_ascii=False)
+        }
+
+    # --- Шаг 2 входа: проверяем код, выдаём токен сессии ---
+    if mode == 'admin_login_verify':
+        code = str(body.get('code', '')).strip()
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        conn.autocommit = True
+        try:
+            with conn.cursor() as cur:
+                cur.execute(
+                    f"SELECT id FROM {CODES_TABLE} "
+                    f"WHERE purpose = 'login' AND code = %s AND used = false "
+                    f"AND expires_at > now() ORDER BY id DESC LIMIT 1",
+                    (code,)
+                )
+                row = cur.fetchone()
+                if not row:
+                    return {
+                        'statusCode': 401,
+                        'headers': {**cors, 'Content-Type': 'application/json'},
+                        'body': json.dumps({'ok': False, 'error': 'Неверный или просроченный код'}, ensure_ascii=False)
+                    }
+                cur.execute(f"UPDATE {CODES_TABLE} SET used = true WHERE id = %s", (row[0],))
+        finally:
+            conn.close()
+        return {
+            'statusCode': 200,
+            'headers': {**cors, 'Content-Type': 'application/json'},
+            'body': json.dumps({'ok': True, 'token': _make_token()}, ensure_ascii=False)
+        }
+
+    # --- Сброс пароля, шаг 1: отправить код на почту ---
+    if mode == 'admin_reset_request':
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        conn.autocommit = True
+        try:
+            with conn.cursor() as cur:
+                code = _gen_code()
+                cur.execute(
+                    f"INSERT INTO {CODES_TABLE} (purpose, code, expires_at) "
+                    f"VALUES ('reset', %s, now() + interval '10 minutes')",
+                    (code,)
+                )
+        finally:
+            conn.close()
+        _send_code_email(os.environ['SMTP_PASSWORD'], code, 'reset')
+        return {
+            'statusCode': 200,
+            'headers': {**cors, 'Content-Type': 'application/json'},
+            'body': json.dumps({'ok': True}, ensure_ascii=False)
+        }
+
+    # --- Сброс пароля, шаг 2: проверить код и установить новый пароль ---
+    if mode == 'admin_reset_confirm':
+        code = str(body.get('code', '')).strip()
+        new_password = body.get('newPassword', '')
+        if len(new_password) < 6:
+            return {
+                'statusCode': 400,
+                'headers': {**cors, 'Content-Type': 'application/json'},
+                'body': json.dumps({'ok': False, 'error': 'Пароль минимум 6 символов'}, ensure_ascii=False)
+            }
+        conn = psycopg2.connect(os.environ['DATABASE_URL'])
+        conn.autocommit = True
+        try:
+            with conn.cursor() as cur:
+                cur.execute(
+                    f"SELECT id FROM {CODES_TABLE} "
+                    f"WHERE purpose = 'reset' AND code = %s AND used = false "
+                    f"AND expires_at > now() ORDER BY id DESC LIMIT 1",
+                    (code,)
+                )
+                row = cur.fetchone()
+                if not row:
+                    return {
+                        'statusCode': 401,
+                        'headers': {**cors, 'Content-Type': 'application/json'},
+                        'body': json.dumps({'ok': False, 'error': 'Неверный или просроченный код'}, ensure_ascii=False)
+                    }
+                cur.execute(f"UPDATE {CODES_TABLE} SET used = true WHERE id = %s", (row[0],))
+                cur.execute(
+                    f"UPDATE {SETTINGS_TABLE} SET password_hash = %s, updated_at = now() WHERE id = 1",
+                    (_hash_password(new_password),)
+                )
+        finally:
+            conn.close()
+        return {
+            'statusCode': 200,
+            'headers': {**cors, 'Content-Type': 'application/json'},
+            'body': json.dumps({'ok': True}, ensure_ascii=False)
+        }
 
     if mode == 'pricing_save':
-        headers = event.get('headers') or {}
-        password = headers.get('X-Admin-Password') or headers.get('x-admin-password')
-        if not password or password != os.environ.get('ADMIN_PASSWORD'):
+        token = headers.get('X-Admin-Token') or headers.get('x-admin-token') or ''
+        if not _check_token(token):
             return {
                 'statusCode': 401,
                 'headers': {**cors, 'Content-Type': 'application/json'},
-                'body': json.dumps({'ok': False, 'error': 'Неверный пароль'}, ensure_ascii=False)
+                'body': json.dumps({'ok': False, 'error': 'Требуется вход'}, ensure_ascii=False)
             }
 
         plans = body.get('plans', [])

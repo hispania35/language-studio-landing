@@ -7,6 +7,7 @@ import Icon from "@/components/ui/icon";
 import { toast } from "@/components/ui/use-toast";
 import { PRICING_API, type Plan } from "@/data/pricing";
 import { useMeta } from "@/hooks/useMeta";
+import AdminAuth from "@/components/admin/AdminAuth";
 
 const emptyPlan: Plan = {
   name: "",
@@ -30,8 +31,9 @@ const AdminPricing = () => {
     noindex: true,
   });
 
-  const [password, setPassword] = useState("");
-  const [authed, setAuthed] = useState(false);
+  const [token, setToken] = useState<string | null>(() =>
+    sessionStorage.getItem("admin_token"),
+  );
   const [plans, setPlans] = useState<Plan[]>([]);
   const [loading, setLoading] = useState(false);
   const [saving, setSaving] = useState(false);
@@ -59,23 +61,33 @@ const AdminPricing = () => {
     });
   };
 
+  const handleAuth = (t: string) => {
+    sessionStorage.setItem("admin_token", t);
+    setToken(t);
+  };
+
+  const logout = () => {
+    sessionStorage.removeItem("admin_token");
+    setToken(null);
+  };
+
   const save = async () => {
+    if (!token) return;
     setSaving(true);
     try {
       const res = await fetch(PRICING_API, {
         method: "POST",
-        headers: { "Content-Type": "application/json", "X-Admin-Password": password },
+        headers: { "Content-Type": "application/json", "X-Admin-Token": token },
         body: JSON.stringify({ mode: "pricing_save", plans }),
       });
       const data = await res.json();
       if (res.status === 401) {
-        toast({ title: "Неверный пароль", variant: "destructive" });
-        setAuthed(false);
+        toast({ title: "Сессия истекла, войдите заново", variant: "destructive" });
+        logout();
         return;
       }
       if (!res.ok || !data.ok) throw new Error();
       setPlans(data.plans);
-      setAuthed(true);
       toast({ title: "Цены сохранены" });
     } catch {
       toast({ title: "Ошибка сохранения", variant: "destructive" });
@@ -84,30 +96,8 @@ const AdminPricing = () => {
     }
   };
 
-  if (!authed) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-muted/30 p-4">
-        <div className="w-full max-w-sm bg-white rounded-2xl shadow-lg p-8">
-          <div className="flex items-center gap-2 mb-6">
-            <Icon name="Lock" size={20} className="text-purple-600" />
-            <h1 className="font-heading font-800 text-xl">Управление ценами</h1>
-          </div>
-          <Label htmlFor="pwd">Пароль администратора</Label>
-          <Input
-            id="pwd"
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && save()}
-            className="mt-2 mb-4"
-            placeholder="Введите пароль"
-          />
-          <Button className="w-full gradient-primary text-white" onClick={save} disabled={saving || !password}>
-            {saving ? "Проверяем..." : "Войти"}
-          </Button>
-        </div>
-      </div>
-    );
+  if (!token) {
+    return <AdminAuth onSuccess={handleAuth} />;
   }
 
   return (
@@ -115,10 +105,16 @@ const AdminPricing = () => {
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="flex items-center justify-between mb-8">
           <h1 className="font-heading font-800 text-2xl">Цены на тарифы</h1>
-          <Button className="gradient-primary text-white" onClick={save} disabled={saving}>
-            <Icon name="Save" size={18} />
-            {saving ? "Сохраняем..." : "Сохранить"}
-          </Button>
+          <div className="flex items-center gap-2">
+            <Button variant="ghost" onClick={logout}>
+              <Icon name="LogOut" size={18} />
+              Выйти
+            </Button>
+            <Button className="gradient-primary text-white" onClick={save} disabled={saving}>
+              <Icon name="Save" size={18} />
+              {saving ? "Сохраняем..." : "Сохранить"}
+            </Button>
+          </div>
         </div>
 
         {loading && <p className="text-muted-foreground">Загрузка...</p>}
