@@ -52,7 +52,14 @@ const AdminAuth = ({ onSuccess }: AdminAuthProps) => {
     if (code.length !== 8) return;
     setBusy(true);
     try {
-      const { data } = await api({ mode: "admin_login_verify", code });
+      const { status, data } = await api({ mode: "admin_login_verify", code });
+      if (status === 429 || data.blocked) {
+        toast({
+          title: data.error || "Слишком много попыток. Попробуйте позже.",
+          variant: "destructive",
+        });
+        return;
+      }
       if (!data.ok || !data.token) {
         toast({ title: "Неверный или просроченный код", variant: "destructive" });
         return;

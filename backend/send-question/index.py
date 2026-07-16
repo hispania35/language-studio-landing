@@ -16,8 +16,11 @@ PROMO_TABLE = 't_p27960186_language_studio_land.promo_codes'
 PRICING_TABLE = 't_p27960186_language_studio_land.pricing_plans'
 SETTINGS_TABLE = 't_p27960186_language_studio_land.admin_settings'
 CODES_TABLE = 't_p27960186_language_studio_land.admin_codes'
+LOCKOUT_TABLE = 't_p27960186_language_studio_land.admin_lockout'
 ADMIN_EMAIL = 'hispania35@yandex.ru'
 SESSION_TTL = 8 * 3600  # 8 часов
+MAX_ATTEMPTS = 5        # попыток ввода кода
+BLOCK_MINUTES = 5       # блокировка после превышения
 
 
 def _generate_promo() -> str:
@@ -70,6 +73,42 @@ def _check_token(token: str) -> bool:
 
 def _gen_code() -> str:
     return ''.join(random.choices(string.digits, k=8))
+
+
+def _blocked_seconds(cur, ip: str) -> int:
+    """Возвращает сколько секунд осталось до конца блокировки (0 — не заблокирован)."""
+    ip_sql = ip.replace("'", "''")
+    cur.execute(
+        f"SELECT GREATEST(0, CEIL(EXTRACT(EPOCH FROM (blocked_until - now())))) "
+        f"FROM {LOCKOUT_TABLE} WHERE ip = '{ip_sql}' AND blocked_until > now()"
+    )
+    row = cur.fetchone()
+    return int(row[0]) if row and row[0] else 0
+
+
+def _register_fail(cur, ip: str) -> int:
+    """Учитывает неудачную попытку. Возвращает секунды блокировки, если лимит превышен."""
+    ip_sql = ip.replace("'", "''")
+    cur.execute(
+        f"INSERT INTO {LOCKOUT_TABLE} (ip, fails, updated_at) VALUES ('{ip_sql}', 1, now()) "
+        f"ON CONFLICT (ip) DO UPDATE SET fails = {LOCKOUT_TABLE}.fails + 1, updated_at = now() "
+        f"RETURNING fails"
+    )
+    fails = cur.fetchone()[0]
+    if fails >= MAX_ATTEMPTS:
+        cur.execute(
+            f"UPDATE {LOCKOUT_TABLE} SET blocked_until = now() + interval '{BLOCK_MINUTES} minutes', "
+            f"fails = 0 WHERE ip = '{ip_sql}'"
+        )
+        return BLOCK_MINUTES * 60
+    return 0
+
+
+def _reset_fails(cur, ip: str) -> None:
+    ip_sql = ip.replace("'", "''")
+    cur.execute(
+        f"UPDATE {LOCKOUT_TABLE} SET fails = 0, blocked_until = NULL WHERE ip = '{ip_sql}'"
+    )
 
 
 def _send_code_email(smtp_password: str, code: str, purpose: str) -> None:
@@ -183,10 +222,23 @@ def handler(event: dict, context) -> dict:
     # --- Шаг 2 входа: проверяем код, выдаём токен сессии ---
     if mode == 'admin_login_verify':
         code = str(body.get('code', '')).strip()
+        ip = 'admin_login'  # админ один — блокировка общая по попыткам входа
         conn = psycopg2.connect(os.environ['DATABASE_URL'])
         conn.autocommit = True
         try:
             with conn.cursor() as cur:
+                left = _blocked_seconds(cur, ip)
+                if left > 0:
+                    minutes = (left + 59) // 60
+                    return {
+                        'statusCode': 429,
+                        'headers': {**cors, 'Content-Type': 'application/json'},
+                        'body': json.dumps(
+                            {'ok': False, 'blocked': True, 'secondsLeft': left,
+                             'error': f'Слишком много попыток. Попробуйте через {minutes} мин.'},
+                            ensure_ascii=False
+                        )
+                    }
                 cur.execute(
                     f"SELECT id FROM {CODES_TABLE} "
                     f"WHERE purpose = 'login' AND code = %s AND used = false "
@@ -195,12 +247,24 @@ def handler(event: dict, context) -> dict:
                 )
                 row = cur.fetchone()
                 if not row:
+                    block = _register_fail(cur, ip)
+                    if block > 0:
+                        return {
+                            'statusCode': 429,
+                            'headers': {**cors, 'Content-Type': 'application/json'},
+                            'body': json.dumps(
+                                {'ok': False, 'blocked': True, 'secondsLeft': block,
+                                 'error': f'Слишком много попыток. Вход заблокирован на {BLOCK_MINUTES} мин.'},
+                                ensure_ascii=False
+                            )
+                        }
                     return {
                         'statusCode': 401,
                         'headers': {**cors, 'Content-Type': 'application/json'},
                         'body': json.dumps({'ok': False, 'error': 'Неверный или просроченный код'}, ensure_ascii=False)
                     }
                 cur.execute(f"UPDATE {CODES_TABLE} SET used = true WHERE id = %s", (row[0],))
+                _reset_fails(cur, ip)
         finally:
             conn.close()
         return {
